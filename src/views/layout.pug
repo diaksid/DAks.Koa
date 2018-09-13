@@ -1,0 +1,22 @@
+doctype html
+
+html(
+lang='ru'
+itemscope
+itemtype='http://schema.org/WebPage'
+)
+  head
+    include includes/head.pug
+
+  body.mdc-typography
+    include includes/drawer.pug
+    include includes/header.pug
+
+    main.mdc-top-app-bar--fixed-adjust(role='main')
+      block content
+
+    footer.pro-footer
+      p some footer content
+
+    script(src=manifest['vendor.js'])
+    script(src=manifest['main.js'])

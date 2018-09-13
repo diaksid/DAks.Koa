@@ -1,0 +1,8 @@
+# //www.robotstxt.org
+
+# Sitemap: https://daks.pro/sitemap.xml
+
+User-agent: *
+Disallow: /api
+
+# Host: https://daks.pro

@@ -1,0 +1,10 @@
+.mdc-top-app-bar__action-item {
+  &.is-active {
+    cursor: default;
+    --mdc-theme-on-primary: #3cc;
+    &:before,
+    &:after {
+      display: none;
+    }
+  }
+}
