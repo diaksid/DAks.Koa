@@ -6,10 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const WebpackManifestPlugin = require('webpack-manifest-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const MediaQueryPlugin = require('media-query-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-
-const manifestFileName = path.join(config.path.build, 'assets.json')
 
 module.exports = (env, argv) => {
   const debug = argv.mode !== 'production'
@@ -34,7 +31,6 @@ module.exports = (env, argv) => {
             grid: true
           }
         }),
-        require('css-mqpacker')({ sort: false }),
         require('cssnano')({
           preset: ['default', {
             discardComments: { removeAll: !debug },
@@ -58,32 +54,28 @@ module.exports = (env, argv) => {
   return {
     mode: argv.mode,
     entry: {
-      main: './src/assets' // ['@babel/polyfill', './src/assets']
+      main: './src/assets/index.mdc-web.js' // ['@babel/polyfill', './src/assets']
     },
     output: {
-      path: path.join(config.path.public, config.dir.assets),
+      path: path.join(config.path.build, config.dir.assets),
       filename: debug ? '[name].bundle.js' : '[name].[contenthash].bundle.js',
       chunkFilename: debug ? '[name].bundle.js' : '[name].[contenthash].bundle.js',
       publicPath: `/${config.dir.assets}/`
     },
     resolve: {
       modules: [
-        config.path.assets,
-        path.join(config.path.app, 'node_modules')
+        // path.resolve(config.path.app, 'node_modules'),
+        config.path.assets
       ],
       extensions: ['.js', '.json', '.css', '.scss'],
       enforceExtension: false,
       alias: {
         'assets': config.path.assets,
-        'images': path.join(config.path.assets, 'images'),
-        'stylesheets': path.join(config.path.assets, 'stylesheets'),
-        'javascripts': path.join(config.path.assets, 'javascripts'),
+        'images': path.resolve(config.path.assets, 'images'),
+        'stylesheets': path.resolve(config.path.assets, 'stylesheets'),
+        'javascripts': path.resolve(config.path.assets, 'javascripts'),
         'static': config.path.static
       }
-    },
-    externals: {
-      jquery: 'jQuery',
-      'popper.js': 'Popper'
     },
     devtool: 'source-map',
     module: {
@@ -108,7 +100,6 @@ module.exports = (env, argv) => {
           use: [
             MiniCssExtractPlugin.loader,
             cssLoader,
-            MediaQueryPlugin.loader,
             postcssLoader
           ]
         },
@@ -117,7 +108,6 @@ module.exports = (env, argv) => {
           use: [
             MiniCssExtractPlugin.loader,
             cssLoader,
-            MediaQueryPlugin.loader,
             postcssLoader,
             sassLoader
           ]
@@ -158,23 +148,21 @@ module.exports = (env, argv) => {
     plugins: [
       /*
       new webpack.ProvidePlugin({
-        $: 'jquery'
+        $: 'jquery',
+        'Popper': 'popper.js'
       }),
       */
-      new CleanWebpackPlugin([
-        config.path.public,
-        manifestFileName
-      ], { verbose: verbose }),
+      new CleanWebpackPlugin([config.path.build], {
+        verbose: verbose
+      }),
       new CopyWebpackPlugin([
-        { from: config.dir.static, to: config.path.public }
+        { from: config.dir.static, to: config.path.build }
       ], {}),
       new MiniCssExtractPlugin({
         filename: debug ? '[name].bundle.css' : '[name].[contenthash].bundle.css',
         chunkFilename: debug ? '[id].css' : '[id].[contenthash].css'
       }),
-      new MediaQueryPlugin({}),
       new WebpackManifestPlugin({
-        fileName: manifestFileName,
         publicPath: `/${config.dir.assets}/`,
         filter: file => file.isChunk || file.isModuleAsset
       })
