@@ -14,7 +14,9 @@ const config = require('config')
 const error = require('./middleware/error')
 const flash = require('./middleware/flash')
 const router = require('./routes')
-const manifest = require(`../${config.dir.build}/${config.dir.assets}/manifest`)
+const assets = require(`../${config.dir.build}/assets`)
+
+console.log(process.env.NODE_ENV)
 
 const app = new Koa()
 
@@ -33,10 +35,10 @@ app.use(koaCompress({
 
 app.use(koaViews(path.resolve(__dirname, 'views'), {
   extension: 'pug',
-  options: { manifest: manifest }
+  options: { assets: assets }
 }))
 
-app.use(koaStatic(config.path.build))
+app.use(koaStatic(config.path.public))
 
 app
   .use(error)

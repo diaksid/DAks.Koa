@@ -1,7 +1,7 @@
 const path = require('path')
 const config = require('config')
 
-// const webpack = require('webpack')
+const webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const WebpackManifestPlugin = require('webpack-manifest-plugin')
@@ -54,6 +54,8 @@ module.exports = (env, argv) => {
       ]
     }
   }
+
+  process.env.NODE_ENV = argv.mode
 
   return {
     mode: argv.mode,
@@ -156,6 +158,10 @@ module.exports = (env, argv) => {
       ]
     },
     plugins: [
+      new webpack.DefinePlugin({
+        TYPE: JSON.stringify('assets'),
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+      }),
       /*
       new webpack.ProvidePlugin({
         $: 'jquery'

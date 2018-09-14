@@ -6,31 +6,29 @@ block content
     p some content
 
 
-  // img(
-    src=manifest['icon.png']
+    canvas.daks(
     width=192
     height=192
     data-lightbox='index'
-    data-lightbox-href=manifest['icon.png']
+    data-lightbox-href=assets['icon.png']
     )
     link(
     itemprop='image'
-    href=manifest['00.jpg']
+    href=assets['00.jpg']
     data-lightbox='index'
     )
     link(
     itemprop='image'
-    href=manifest['01.jpg']
+    href=assets['01.jpg']
     data-lightbox='index'
     )
 
-    .mdc-layout-grid
-      .mdc-layout-grid__inner
-        each val, idx in Array(20)
-          .mdc-layout-grid__cell--span-3
-            canvas.lazyload.lazyload--fluid(
-            id=`__${idx + 1}`
-            width=600
-            height=450
-            data-lazy=`https://picsum.photos/600/450?image=${idx * 3 + 1}`
-            )
+    .row.mt-5
+      each val, idx in Array(20)
+        .col-3.mb-4
+          canvas.lazyload.lazyload--fluid(
+          id=`__${idx + 1}`
+          width=600
+          height=450
+          data-lazy=`https://picsum.photos/600/450?image=${idx * 3 + 1}`
+          )
