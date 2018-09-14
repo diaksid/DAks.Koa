@@ -3,7 +3,7 @@
 
 let cluster = require('cluster')
 
-let numCPUs = 2 // require('os').cpus().length
+let numCPUs = require('os').cpus().length
 
 if (cluster.isMaster) {
   cluster.on('online', (worker) => {

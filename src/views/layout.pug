@@ -8,15 +8,19 @@ itemtype='http://schema.org/WebPage'
   head
     include includes/head.pug
 
-  body.mdc-typography
-    include includes/drawer.pug
-    include includes/header.pug
+  body
+    header
+      p some header content
 
-    main.mdc-top-app-bar--fixed-adjust(role='main')
+    main(role='main')
       block content
 
-    footer.pro-footer
+    footer
       p some footer content
 
-    script(src=manifest['vendor.js'])
+    script(
+    src='https://code.jquery.com/jquery-3.3.1.slim.min.js'
+    integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo'
+    crossorigin='anonymous'
+    )
     script(src=manifest['main.js'])

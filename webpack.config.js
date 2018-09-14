@@ -25,7 +25,10 @@ module.exports = (env, argv) => {
       plugins: (loader) => [
         require('postcss-import')({ root: loader.resourcePath }),
         require('postcss-preset-env')({
-          autoprefixer: { grid: true }
+          autoprefixer: {
+            cascade: false,
+            grid: true
+          }
         }),
         require('cssnano')({
           preset: ['default', {
@@ -86,7 +89,7 @@ module.exports = (env, argv) => {
             options: {
               comments: false,
               presets: [
-                ['@babel/preset-env', {modules: false}]
+                ['@babel/preset-env', { modules: false }]
               ],
               plugins: []
             }
@@ -119,10 +122,12 @@ module.exports = (env, argv) => {
       ]
     },
     optimization: {
+      /*
       splitChunks: {
         name: 'vendor',
         chunks: 'all'
       },
+      */
       minimizer: [
         new UglifyJsPlugin({
           cache: true,

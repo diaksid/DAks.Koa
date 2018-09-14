@@ -2,33 +2,34 @@ extends layout.pug
 
 block content
   h1 KOA
-  p CSRF: #{CSRF}
+  p some content
 
-  img(
-  src=manifest['icon.png']
-  width=192
-  height=192
-  data-lightbox='index'
-  data-lightbox-href=manifest['icon.png']
-  )
-  link(
-  itemprop='image'
-  href=manifest['00.jpg']
-  data-lightbox='index'
-  )
-  link(
-  itemprop='image'
-  href=manifest['01.jpg']
-  data-lightbox='index'
-  )
 
-  .mdc-layout-grid
-    .mdc-layout-grid__inner
-      each val, idx in Array(20)
-        .mdc-layout-grid__cell--span-3
-          canvas.lazyload.lazyload--fluid(
-          id=`__${idx + 1}`
-          width=600
-          height=450
-          data-lazy=`https://picsum.photos/600/450?image=${idx * 3 + 1}`
-          )
+  // img(
+    src=manifest['icon.png']
+    width=192
+    height=192
+    data-lightbox='index'
+    data-lightbox-href=manifest['icon.png']
+    )
+    link(
+    itemprop='image'
+    href=manifest['00.jpg']
+    data-lightbox='index'
+    )
+    link(
+    itemprop='image'
+    href=manifest['01.jpg']
+    data-lightbox='index'
+    )
+
+    .mdc-layout-grid
+      .mdc-layout-grid__inner
+        each val, idx in Array(20)
+          .mdc-layout-grid__cell--span-3
+            canvas.lazyload.lazyload--fluid(
+            id=`__${idx + 1}`
+            width=600
+            height=450
+            data-lazy=`https://picsum.photos/600/450?image=${idx * 3 + 1}`
+            )

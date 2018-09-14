@@ -15,6 +15,9 @@ module.exports = {
   plugins: [
     'html'
   ],
-  rules: {},
+  rules: {
+    'generator-star-spacing': 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+  },
   globals: {}
-};
+}
