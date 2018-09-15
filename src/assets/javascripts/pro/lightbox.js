@@ -15,7 +15,7 @@ const ProLightbox = ($ => {
 
   class ProLightbox {
     constructor (options) {
-      this._options = $.extend(Default, options)
+      this._options = $.extend({}, Default, options)
       this._stack = {}
       this._path = null
       this._group = null
@@ -53,7 +53,7 @@ const ProLightbox = ($ => {
       ProLightbox._image.hide()
       ProLightbox._next.hide()
       ProLightbox._prev.hide()
-      const element = $(this.path).get(0)
+      const element = $(this.path)[0]
       if (element) {
         ProLightbox._content.addClass('lightbox-html')
         ProLightbox._modal
@@ -75,11 +75,10 @@ const ProLightbox = ($ => {
       }
       ProLightbox._image.attr('src', this._path)
       ProLightbox._image.show()
-      const element = ProLightbox._image.get(0)
-      if (element.complete) {
+      if (ProLightbox._image[0].complete) {
         this._show(step)
       } else {
-        element.onload = () => this._show(step)
+        ProLightbox._image[0].onload = () => this._show(step)
       }
     }
 
