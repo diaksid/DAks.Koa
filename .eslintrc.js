@@ -19,9 +19,5 @@ module.exports = {
     'generator-star-spacing': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   },
-  globals: {
-    'DEBUG': true,
-    'VERBOSE': true,
-    'CONFIG': true
-  }
+  globals: {}
 }
