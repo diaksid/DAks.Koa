@@ -1,4 +1,4 @@
-import 'bootstrap/js/dist'
+// import 'bootstrap/js/dist'
 import 'bootstrap/js/dist/util'
 import 'bootstrap/js/dist/alert'
 import 'bootstrap/js/dist/button'

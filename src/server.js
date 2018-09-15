@@ -16,8 +16,6 @@ const flash = require('./middleware/flash')
 const router = require('./routes')
 const assets = require(`../${config.dir.build}/assets`)
 
-console.log(process.env.NODE_ENV)
-
 const app = new Koa()
 
 app.keys = ['session_key', 'csrf_example']

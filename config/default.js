@@ -12,7 +12,7 @@ const config = {
     src: 'src',
     assets: 'assets',
     static: 'static',
-    build: 'dist',
+    build: 'build',
     public: 'public'
   },
 

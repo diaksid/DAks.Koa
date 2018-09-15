@@ -1,12 +1,13 @@
 const path = require('path')
 const config = require('config')
 
-// const webpack = require('webpack')
+const webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const WebpackManifestPlugin = require('webpack-manifest-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const MediaQueryPlugin = require('media-query-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const WebpackManifestPlugin = require('webpack-manifest-plugin')
 
 module.exports = (env, argv) => {
   const debug = argv.mode !== 'production'
@@ -31,6 +32,7 @@ module.exports = (env, argv) => {
             grid: true
           }
         }),
+        require('css-mqpacker')({ sort: false }),
         require('cssnano')({
           preset: ['default', {
             discardComments: { removeAll: !debug },
@@ -51,32 +53,42 @@ module.exports = (env, argv) => {
     }
   }
 
+  process.env.NODE_ENV = argv.mode
+
   return {
     mode: argv.mode,
+    target: 'web',
+    context: config.path.app,
     entry: {
-      main: './src/assets/index.mdc-web.js' // ['@babel/polyfill', './src/assets']
+      app: './src/assets'
     },
     output: {
-      path: path.join(config.path.build, config.dir.assets),
-      filename: debug ? '[name].bundle.js' : '[name].[contenthash].bundle.js',
-      chunkFilename: debug ? '[name].bundle.js' : '[name].[contenthash].bundle.js',
+      path: path.join(config.path.public, config.dir.assets),
+      filename: debug ? '[name].bundle.js' : '[name].[contenthash:7].bundle.js',
+      chunkFilename: debug ? '[name].bundle.js' : '[name].[contenthash:7].bundle.js',
       publicPath: `/${config.dir.assets}/`
     },
     resolve: {
       modules: [
-        // path.resolve(config.path.app, 'node_modules'),
-        config.path.assets
+        config.path.assets,
+        path.join(config.path.app, 'node_modules')
       ],
       extensions: ['.js', '.json', '.css', '.scss'],
       enforceExtension: false,
       alias: {
         'assets': config.path.assets,
-        'images': path.resolve(config.path.assets, 'images'),
-        'stylesheets': path.resolve(config.path.assets, 'stylesheets'),
-        'javascripts': path.resolve(config.path.assets, 'javascripts'),
+        'images': path.join(config.path.assets, 'images'),
+        'stylesheets': path.join(config.path.assets, 'stylesheets'),
+        'javascripts': path.join(config.path.assets, 'javascripts'),
         'static': config.path.static
       }
     },
+    /*
+    externals: {
+      jquery: 'jQuery',
+      'popper.js': 'Popper'
+    },
+    */
     devtool: 'source-map',
     module: {
       rules: [
@@ -100,6 +112,7 @@ module.exports = (env, argv) => {
           use: [
             MiniCssExtractPlugin.loader,
             cssLoader,
+            MediaQueryPlugin.loader,
             postcssLoader
           ]
         },
@@ -108,6 +121,7 @@ module.exports = (env, argv) => {
           use: [
             MiniCssExtractPlugin.loader,
             cssLoader,
+            MediaQueryPlugin.loader,
             postcssLoader,
             sassLoader
           ]
@@ -117,25 +131,29 @@ module.exports = (env, argv) => {
           loader: 'url-loader',
           options: {
             limit: 8192,
-            name: debug ? '[name].[ext]' : '[name].[hash:base64:16].[ext]'
+            name: debug ? '[name].[ext]' : '[name].[hash:7].[ext]'
           }
         },
         {
           test: /\.(wav|mp3)$/,
           loader: 'file-loader',
           options: {
-            name: debug ? '[name].[ext]' : '[name].[hash:base64:16].[ext]'
+            name: debug ? '[name].[ext]' : '[name].[hash:7].[ext]'
           }
         }
       ]
     },
     optimization: {
-      /*
       splitChunks: {
-        name: 'vendors',
-        chunks: 'all'
+        cacheGroups: {
+          vendors: {
+            test: /node_modules/, // new RegExp('node_modules' + '\\' + path.sep + 'jquery.*'),
+            name: 'vendors',
+            chunks: 'initial',
+            enforce: true
+          }
+        }
       },
-      */
       minimizer: [
         new UglifyJsPlugin({
           cache: true,
@@ -146,23 +164,28 @@ module.exports = (env, argv) => {
       ]
     },
     plugins: [
+      new webpack.DefinePlugin({
+        TYPE: JSON.stringify('assets'),
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+      }),
       /*
       new webpack.ProvidePlugin({
-        $: 'jquery',
-        'Popper': 'popper.js'
+        $: 'jquery'
       }),
       */
-      new CleanWebpackPlugin([config.path.build], {
-        verbose: verbose
-      }),
+      new CleanWebpackPlugin([
+        `${config.path.public}/**`
+      ], { verbose: verbose }),
       new CopyWebpackPlugin([
-        { from: config.dir.static, to: config.path.build }
+        { from: config.dir.static, to: config.path.public }
       ], {}),
       new MiniCssExtractPlugin({
-        filename: debug ? '[name].bundle.css' : '[name].[contenthash].bundle.css',
-        chunkFilename: debug ? '[id].css' : '[id].[contenthash].css'
+        filename: debug ? '[name].bundle.css' : '[name].[contenthash:7].bundle.css',
+        chunkFilename: debug ? '[id].css' : '[id].[contenthash:7].css'
       }),
+      new MediaQueryPlugin({}),
       new WebpackManifestPlugin({
+        fileName: path.join(config.path.build, 'assets.json'),
         publicPath: `/${config.dir.assets}/`,
         filter: file => file.isChunk || file.isModuleAsset
       })

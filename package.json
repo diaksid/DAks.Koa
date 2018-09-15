@@ -6,8 +6,12 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon src/server.js",
-    "watch": "webpack --mode development --watch",
-    "build": "webpack --mode production",
+    "build": "yarn run build.server && yarn run build.assets",
+    "build.assets": "webpack --mode production --config config/webpack.assets.js",
+    "build.server": "webpack --mode production --config config/webpack.server.js",
+    "watch": "yarn run watch.server && yarn run watch.assets",
+    "watch.assets": "webpack --mode development --watch --config config/webpack.assets.js",
+    "watch.server": "webpack --mode development --watch --config config/webpack.server.js",
     "start": "cross-env NODE_ENV=production nodemon src/server.js",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "precommit": "yarn run lint"
