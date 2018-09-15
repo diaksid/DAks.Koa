@@ -10,7 +10,6 @@
     "build": "npm run build.assets && npm run build.server",
     "build.assets": "webpack --mode production --config config/webpack.assets.js",
     "build.server": "webpack --mode production --config config/webpack.server.js",
-    "watch": "npm run watch.assets && npm run watch.server",
     "watch.assets": "webpack --mode development --watch --config config/webpack.assets.js",
     "watch.server": "webpack --mode development --watch --config config/webpack.server.js",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
