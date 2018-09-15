@@ -6,15 +6,15 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon src/server.js",
-    "build": "yarn run build.assets && yarn run build.server",
+    "start": "cross-env NODE_ENV=production node cluster.js",
+    "build": "npm run build.assets && npm run build.server",
     "build.assets": "webpack --mode production --config config/webpack.assets.js",
     "build.server": "webpack --mode production --config config/webpack.server.js",
-    "watch": "yarn run watch.assets && yarn run watch.server",
+    "watch": "npm run watch.assets && npm run watch.server",
     "watch.assets": "webpack --mode development --watch --config config/webpack.assets.js",
     "watch.server": "webpack --mode development --watch --config config/webpack.server.js",
-    "start": "cross-env NODE_ENV=production node cluster.js",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "precommit": "yarn run lint"
+    "precommit": "npm run lint"
   },
   "dependencies": {
     "config": "^2.0.1",

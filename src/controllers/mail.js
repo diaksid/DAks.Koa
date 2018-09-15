@@ -58,7 +58,7 @@ module.exports = {
         if (body.success) {
           await transporter.sendMail(mail)
             .then(mes => {
-              ctx.body = { message: 'Сообщение отправлено' };
+              ctx.body = { message: 'Сообщение отправлено' }
               process.env.DEBUG && console.info(mes.envelope)
             })
         } else {

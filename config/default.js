@@ -4,7 +4,7 @@ const path = require('path')
 const config = {
   server: {
     protocol: process.env.HTTPS ? 'https' : 'http',
-    host: process.env.HOST || '0.0.0.0',
+    host: process.env.HOST || 'localhost',
     port: process.env.PORT || 3000
   },
   dir: {
