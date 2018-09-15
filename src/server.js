@@ -1,5 +1,4 @@
 const path = require('path')
-
 const Koa = require('koa')
 const koaBodyparser = require('koa-bodyparser')
 const koaCompress = require('koa-compress')
@@ -8,7 +7,6 @@ const koaSession = require('koa-session')
 const koaStatic = require('koa-static')
 const koaViews = require('koa-views')
 
-require('../config')
 const config = require('config')
 
 const error = require('./middleware/error')

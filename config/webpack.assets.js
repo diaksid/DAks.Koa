@@ -1,17 +1,17 @@
 const path = require('path')
-const config = require('config')
-
-const webpack = require('webpack')
+const merge = require('webpack-merge')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const MediaQueryPlugin = require('media-query-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const WebpackManifestPlugin = require('webpack-manifest-plugin')
 
-module.exports = (env, argv) => {
-  const debug = argv.mode !== 'production'
-  const verbose = argv.verbose === true
+const config = require('config')
+
+module.exports = (env = {}, argv) => {
+  if (!env.hasOwnProperty('DEBUG')) {
+    env.DEBUG = argv.hasOwnProperty('debug') ? true : argv.mode !== 'production'
+  }
 
   const cssLoader = {
     loader: 'css-loader',
@@ -35,8 +35,8 @@ module.exports = (env, argv) => {
         require('css-mqpacker')({ sort: false }),
         require('cssnano')({
           preset: ['default', {
-            discardComments: { removeAll: !debug },
-            normalizeWhitespace: { exclude: debug }
+            discardComments: { removeAll: !env.DEBUG },
+            normalizeWhitespace: { exclude: env.DEBUG }
           }]
         })
       ]
@@ -53,28 +53,19 @@ module.exports = (env, argv) => {
     }
   }
 
-  process.env.NODE_ENV = argv.mode
+  const common = require('./webpack.common.js')(env, argv)
 
-  return {
-    mode: argv.mode,
+  return merge(common, {
     target: 'web',
-    context: config.path.app,
     entry: {
       app: './src/assets'
     },
     output: {
       path: path.join(config.path.public, config.dir.assets),
-      filename: debug ? '[name].bundle.js' : '[name].[contenthash:7].bundle.js',
-      chunkFilename: debug ? '[name].bundle.js' : '[name].[contenthash:7].bundle.js',
       publicPath: `/${config.dir.assets}/`
     },
     resolve: {
-      modules: [
-        config.path.assets,
-        path.join(config.path.app, 'node_modules')
-      ],
       extensions: ['.js', '.json', '.css', '.scss'],
-      enforceExtension: false,
       alias: {
         'assets': config.path.assets,
         'images': path.join(config.path.assets, 'images'),
@@ -83,12 +74,6 @@ module.exports = (env, argv) => {
         'static': config.path.static
       }
     },
-    /*
-    externals: {
-      jquery: 'jQuery',
-      'popper.js': 'Popper'
-    },
-    */
     devtool: 'source-map',
     module: {
       rules: [
@@ -131,14 +116,14 @@ module.exports = (env, argv) => {
           loader: 'url-loader',
           options: {
             limit: 8192,
-            name: debug ? '[name].[ext]' : '[name].[hash:7].[ext]'
+            name: env.DEBUG ? '[name].[ext]' : '[name].[hash:7].[ext]'
           }
         },
         {
           test: /\.(wav|mp3)$/,
           loader: 'file-loader',
           options: {
-            name: debug ? '[name].[ext]' : '[name].[hash:7].[ext]'
+            name: env.DEBUG ? '[name].[ext]' : '[name].[hash:7].[ext]'
           }
         }
       ]
@@ -153,35 +138,21 @@ module.exports = (env, argv) => {
             enforce: true
           }
         }
-      },
-      minimizer: [
-        new UglifyJsPlugin({
-          cache: true,
-          parallel: true,
-          extractComments: true,
-          sourceMap: true
-        })
-      ]
+      }
     },
     plugins: [
-      new webpack.DefinePlugin({
-        TYPE: JSON.stringify('assets'),
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-      }),
-      /*
-      new webpack.ProvidePlugin({
-        $: 'jquery'
-      }),
-      */
       new CleanWebpackPlugin([
         `${config.path.public}/**`
-      ], { verbose: verbose }),
+      ], {
+        root: config.path.app,
+        verbose: env.DEBUG
+      }),
       new CopyWebpackPlugin([
         { from: config.dir.static, to: config.path.public }
       ], {}),
       new MiniCssExtractPlugin({
-        filename: debug ? '[name].bundle.css' : '[name].[contenthash:7].bundle.css',
-        chunkFilename: debug ? '[id].css' : '[id].[contenthash:7].css'
+        filename: env.DEBUG ? '[name].bundle.css' : '[name].[contenthash:7].bundle.css',
+        chunkFilename: env.DEBUG ? '[id].css' : '[id].[contenthash:7].css'
       }),
       new MediaQueryPlugin({}),
       new WebpackManifestPlugin({
@@ -190,5 +161,5 @@ module.exports = (env, argv) => {
         filter: file => file.isChunk || file.isModuleAsset
       })
     ]
-  }
+  })
 }

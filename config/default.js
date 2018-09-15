@@ -1,6 +1,20 @@
 const fs = require('fs')
 const path = require('path')
 
+const dotenv = require('dotenv').config
+
+dotenv()
+if (process.env.NODE_ENV !== 'development') {
+  dotenv({ path: `.env.${process.env.NODE_ENV}` })
+}
+
+process.env.DEBUG = process.env.NODE_ENV === 'production' ? false : process.env.DEBUG
+
+if (/^win/i.test(process.platform)) {
+  process.env.HOST = 'localhost'
+  process.env.PORT = 3000
+}
+
 const config = {
   server: {
     protocol: process.env.HTTPS ? 'https' : 'http',

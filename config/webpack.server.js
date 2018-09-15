@@ -1,24 +1,21 @@
-const path = require('path')
+const merge = require('webpack-merge')
+const nodeExternals = require('webpack-node-externals')
+
 const config = require('config')
 
-const webpack = require('webpack')
-const nodeExternals = require('webpack-node-externals')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+module.exports = (env = {}, argv) => {
+  if (!env.hasOwnProperty('DEBUG')) {
+    env.DEBUG = argv.hasOwnProperty('debug') ? true : argv.mode !== 'production'
+  }
 
-module.exports = (env, argv) => {
-  const verbose = argv.verbose === true
+  const common = require('./webpack.common.js')(env, argv)
 
-  process.env.NODE_ENV = argv.mode
-
-  return {
-    mode: argv.mode,
+  return merge(common, {
     target: 'node',
     node: {
       __dirname: false,
       __filename: false
     },
-    context: config.path.app,
     entry: {
       app: './src/server'
     },
@@ -27,12 +24,7 @@ module.exports = (env, argv) => {
       filename: 'server.js'
     },
     resolve: {
-      modules: [
-        config.path.src,
-        path.join(config.path.app, 'node_modules')
-      ],
-      extensions: ['.js', '.json'],
-      enforceExtension: false
+      extensions: ['.js', '.json']
     },
     externals: [
       nodeExternals()
@@ -52,25 +44,6 @@ module.exports = (env, argv) => {
           }
         }
       ]
-    },
-    optimization: {
-      minimizer: [
-        new UglifyJsPlugin({
-          cache: true,
-          parallel: true,
-          extractComments: true,
-          sourceMap: true
-        })
-      ]
-    },
-    plugins: [
-      new webpack.DefinePlugin({
-        TYPE: JSON.stringify('server'),
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-      }),
-      new CleanWebpackPlugin([
-        `${config.path.build}/server*.*`
-      ], { verbose: verbose })
-    ]
-  }
+    }
+  })
 }
