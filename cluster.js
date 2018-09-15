@@ -1,9 +1,7 @@
-// require('@babel/register')
-// require('@babel/polyfill')
+const cluster = require('cluster')
+const config = require('config')
 
-let cluster = require('cluster')
-
-let numCPUs = require('os').cpus().length
+const numCPUs = require('os').cpus().length
 
 if (cluster.isMaster) {
   cluster.on('online', (worker) => {
@@ -19,5 +17,5 @@ if (cluster.isMaster) {
     cluster.fork()
   }
 } else {
-  require('./src/server.js')
+  require(`./${config.dir.build}/server.js`)
 }

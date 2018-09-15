@@ -14,7 +14,7 @@ const config = require('config')
 const error = require('./middleware/error')
 const flash = require('./middleware/flash')
 const router = require('./routes')
-const assets = require(`../${config.dir.build}/assets`)
+const assets = require(`../${config.dir.build}/assets.json`)
 
 const app = new Koa()
 
@@ -31,7 +31,7 @@ app.use(koaCompress({
   flush: require('zlib').Z_SYNC_FLUSH
 }))
 
-app.use(koaViews(path.resolve(__dirname, 'views'), {
+app.use(koaViews(path.resolve(config.path.src, 'views'), {
   extension: 'pug',
   options: { assets: assets }
 }))

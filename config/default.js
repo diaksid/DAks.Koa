@@ -7,7 +7,6 @@ const config = {
     host: process.env.HOST || '0.0.0.0',
     port: process.env.PORT || 3000
   },
-
   dir: {
     src: 'src',
     assets: 'assets',
@@ -15,7 +14,6 @@ const config = {
     build: 'build',
     public: 'public'
   },
-
   path: {
     app: fs.realpathSync(process.cwd())
   },
