@@ -4,7 +4,7 @@ import './pro/lightbox'
 
 ($ => {
   $(() => {
-    $('[data-lightbox]').lightbox()
+    $('[data-light]').lightbox()
 
     const $draver = $('.drawer')
     const $draverCheck = () => {
@@ -24,5 +24,11 @@ import './pro/lightbox'
     })
   })
 
-  $(window).on('load', () => $('[data-lazy]', 'main').lazyload())
+  $(window).on('load', () => {
+    $('[data-lazy]', 'main').lazyload()
+    $(document.querySelectorAll('[data-carousel-lazy]')).lazyload('.pro-carousel', {
+      event: 'slid.bs.carousel',
+      attribute: 'carouselLazy'
+    })
+  })
 })($)

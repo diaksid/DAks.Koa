@@ -2,24 +2,23 @@ import $ from 'jquery'
 
 const ProLazyload = ($ => {
   const NAME = 'lazyload'
-  const VERSION = '0.0.1'
+  const VERSION = '0.0.3'
   const JQUERY_NO_CONFLICT = $.fn[NAME]
 
-  const DATA_KEY = 'lazy'
-  const EVENT_KEY = 'scroll'
-  const DURATION = 1000
-  const DELAY = 60
+  const DATA_KEY = 'lazyload'
+  const EVENT_KEY = `pro.${DATA_KEY}`
 
   const Default = {
     threshold: 0,
-    attribute: DATA_KEY,
-    event: EVENT_KEY,
-    duration: DURATION,
-    delay: DELAY * 5,
+    attribute: 'lazy',
+    event: 'scroll',
+    duration: 1000,
+    delay: 250,
     before: null,
     after: null,
     eventReset: null,
-    mask: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Crect fill='%23ccc' fill-opacity='.2' height='100%' width='100%'/%3E%3C/svg%3E"
+    mask: 'data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"%3E%3Cpath fill="%23aaa" d="m204 203q0 13-9 22t-22 9-22-9-9-22 9-22 22-9 22 9 9 22zm170 64v74h-234v-32l53-53 26 26 85-85zm16-117h-266q-2 0-4 1-1 1-1 4v202q0 2 1 4 1 1 4 1h266q2 0 4-1 1-1 1-4v-202q0-2-1-4-1-1-4-1zm26 5v202q0 11-8 19t-19 8h-266q-11 0-19-8t-8-19v-202q0-11 8-19t19-8h266q11 0 19 8t8 19z"/%3E%3C/svg%3E'
+    // mask: 'data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg"%3E%3Crect fill="%23ccc" fill-opacity=".2" height="100%" width="100%"/%3E%3C/svg%3E'
   }
 
   class ProLazyload {
@@ -91,11 +90,11 @@ const ProLazyload = ($ => {
       this._options = options
       this._delay = this._element.dataset[`${this._options.attribute}Delay`] || this._options.delay
       this._duration = this._element.dataset[`${this._options.attribute}Duration`] || this._options.duration
-      this._$.on('lazyload', this._appear.bind(this))
+      this._$.on(EVENT_KEY, this._appear.bind(this))
     }
 
     _appear () {
-      let res = ['loading', 'loaded', 'error'].indexOf(this._attribute) >= 0
+      let res = ['loading', 'loaded', 'error'].indexOf(this._key) >= 0
       if (!res) {
         res = !this._above() && !this._below() && !this._right() && !this._left()
         if (res) {
@@ -110,8 +109,8 @@ const ProLazyload = ($ => {
     }
 
     _loader () {
-      const data = this._attribute
-      this._attribute = 'loading'
+      const data = this._element.dataset[this._options.attribute]
+      this._key = 'loading'
       if (this._options.mask) {
         if (this._element.tagName === 'IMG') {
           this._element.src = this._options.mask
@@ -130,7 +129,7 @@ const ProLazyload = ($ => {
         setTimeout(this._animate.bind(this), this._delay)
       }
       img.onerror = () => {
-        this._attribute = 'error'
+        this._key = 'error'
       }
       img.src = data
       return this
@@ -165,7 +164,7 @@ const ProLazyload = ($ => {
     }
 
     _animate () {
-      this._attribute = 'loaded'
+      this._key = 'loaded'
       this._$
         .hide()
         .fadeIn(
@@ -181,14 +180,15 @@ const ProLazyload = ($ => {
       } else {
         this._element.style.backgroundImage = `url("${this._options.mask}")`
       }
+      this._key = null
     }
 
-    get _attribute () {
-      return this._element.dataset[this._options.attribute]
+    get _key () {
+      return this._element.dataset[DATA_KEY]
     }
 
-    set _attribute (val) {
-      return (this._element.dataset[this._options.attribute] = val)
+    set _key (val) {
+      return (this._element.dataset[DATA_KEY] = val)
     }
   }
 

@@ -1,0 +1,31 @@
+- n = 5
+.pro-carousel.carousel.slide(
+data-ride='carousel'
+data-interval='10000'
+data-pause
+)
+  ol.carousel-indicators
+    each v, i in Array(n)
+      li(
+      class=(i === 0 && 'active')
+      data-target='.pro-carousel'
+      data-slide-to=i
+      )
+  .carousel-inner
+    each v, i in Array(n)
+      .carousel-item(class=(i === 0 && 'active'))
+        .lazyload(data-carousel-lazy=`https://picsum.photos/600/450?image=${Math.floor(Math.random() * 49) + 1}`)
+  a.carousel-control-prev(
+  role='button'
+  href='.pro-carousel'
+  data-slide='prev'
+  )
+    span.carousel-control-prev-icon(aria-hidden='true')
+    span.sr-only Previous
+  a.carousel-control-next(
+  role='button'
+  href='.pro-carousel'
+  data-slide='next'
+  )
+    span.carousel-control-next-icon(aria-hidden='true')
+    span.sr-only Next
