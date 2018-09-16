@@ -1,40 +1,44 @@
 aside.drawer.drawer--mini
   nav.nav.nav-pills.flex-column
-    button.drawer__toggler(type='button'): +md-icon menu
+    .drawer__toggler: +md-icon.drawer__icon menu
 
-    a.nav-link.dropdown-toggle(
-    href='#homeSubmenu'
+    .btn.btn-link.nav-link.dropdown-toggle(
     data-toggle='collapse'
+    data-target='#homeSubmenu'
     aria-expanded='false'
     )
       +md-icon.drawer__icon apps
       span Home
     #homeSubmenu.collapse
-      a.dropdown-item(href='#') Home 1
-      a.dropdown-item(href='#') Home 2
-      a.dropdown-item(href='#') Home 3
+      .btn.btn-link.dropdown-item Home 1
+      .btn.btn-link.dropdown-item Home 2
+      .btn.btn-link.dropdown-item Home 3
 
-    a.nav-link(href='#')
+    .btn.btn-link.nav-link
       +md-icon.drawer__icon apps
       span About
 
-    a.nav-link.dropdown-toggle(
-    href='#pageSubmenu'
+    .btn.btn-link.nav-link.dropdown-toggle(
     data-toggle='collapse'
+    data-target='#pageSubmenu'
     aria-expanded='false'
     class='dropdown-toggle'
     )
       +md-icon.drawer__icon apps
       span Pages
     #pageSubmenu.collapse
-      a.dropdown-item(href='#') Page 1
-      a.dropdown-item(href='#') Page 2
-      a.dropdown-item(href='#') Page 3
+      .btn.btn-link.dropdown-item Page 1
+      .btn.btn-link.dropdown-item Page 2
+      .btn.btn-link.dropdown-item Page 3
 
-    a.nav-link(href='#')
+    .btn.btn-link.nav-link
       +md-icon.drawer__icon apps
       span Portfolio
 
-    a.nav-link(href='#')
+    .btn.btn-link.nav-link(
+    data-toggle='modal'
+    data-target='#exampleModal'
+    )
       +md-icon.drawer__icon mail_outline
       span Contact
+

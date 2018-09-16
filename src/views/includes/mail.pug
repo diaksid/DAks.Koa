@@ -1,0 +1,29 @@
+#exampleModal.modal.fade(
+role='dialog'
+tabindex='-1'
+aria-labelledby='exampleModalLabel'
+aria-hidden='true'
+)
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        h5#exampleModalLabel.modal-title New message
+        button.close(
+        type='button'
+        data-dismiss='modal'
+        aria-label='Close'
+        ): span(aria-hidden='true') &times;
+      .modal-body
+        form
+          .form-group
+            label.col-form-label(for='recipient-name') Recipient:
+            input#recipient-name.form-control(type='text')
+          .form-group
+            label.col-form-label(for='recipient-text') Message:
+            textarea#recipient-text.form-control
+      .modal-footer
+        button.btn.btn-secondary(
+        type='button'
+        data-dismiss='modal'
+        ) Close
+        button.btn.btn-primary(type='button') Send message

@@ -9,21 +9,16 @@ import './pro/lightbox'
     const $draver = $('.drawer')
     const $draverCheck = () => {
       $draver.find('.collapse.show').removeClass('show')
-      $draver.find('a[aria-expanded=true]').attr('aria-expanded', 'false')
+      $draver.find('[aria-expanded=true]').attr('aria-expanded', 'false')
     }
     $('.drawer__toggler').click(() => {
       $draver.toggleClass('drawer--mini')
       $draverCheck()
     })
-    $('.drawer__icon').click((event) => {
-      if ($draver.hasClass('drawer--mini')) {
-        event.preventDefault()
-        $('.drawer').removeClass('drawer--mini')
-      }
-    })
+    $draver.find('.dropdown-toggle').click(() => $draver.removeClass('drawer--mini'))
     $('main').click(() => {
       if (!$draver.hasClass('drawer--mini')) {
-        $('.drawer').addClass('drawer--mini')
+        $draver.addClass('drawer--mini')
         $draverCheck()
       }
     })
