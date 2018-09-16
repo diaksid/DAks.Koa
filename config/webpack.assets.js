@@ -128,6 +128,7 @@ module.exports = (env = {}, argv) => {
         }
       ]
     },
+    /*
     optimization: {
       splitChunks: {
         cacheGroups: {
@@ -140,6 +141,7 @@ module.exports = (env = {}, argv) => {
         }
       }
     },
+    */
     plugins: [
       new CleanWebpackPlugin([
         `${config.path.public}/**`

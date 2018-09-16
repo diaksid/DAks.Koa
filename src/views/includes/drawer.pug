@@ -1,16 +1,40 @@
-aside.mdc-drawer.mdc-drawer--modal
-    header.mdc-drawer__header
-        canvas(
-            width=128
-            height=128
-            )
-    nav.mdc-drawer__content
-        nav.mdc-list
-            a.mdc-list-item.mdc-list-item--activated(
-                href='#'
-                aria-selected='true'
-                )
-                i.material-icons.mdc-list-item__graphic(aria-hidden='true') inbox
-                span.mdc-list-item__text Inbox
+aside.drawer.drawer--mini
+  nav.nav.nav-pills.flex-column
+    button.drawer__toggler(type='button'): +md-icon menu
 
-.mdc-drawer-scrim
+    a.nav-link.dropdown-toggle(
+    href='#homeSubmenu'
+    data-toggle='collapse'
+    aria-expanded='false'
+    )
+      +md-icon.drawer__icon apps
+      span Home
+    #homeSubmenu.collapse
+      a.dropdown-item(href='#') Home 1
+      a.dropdown-item(href='#') Home 2
+      a.dropdown-item(href='#') Home 3
+
+    a.nav-link(href='#')
+      +md-icon.drawer__icon apps
+      span About
+
+    a.nav-link.dropdown-toggle(
+    href='#pageSubmenu'
+    data-toggle='collapse'
+    aria-expanded='false'
+    class='dropdown-toggle'
+    )
+      +md-icon.drawer__icon apps
+      span Pages
+    #pageSubmenu.collapse
+      a.dropdown-item(href='#') Page 1
+      a.dropdown-item(href='#') Page 2
+      a.dropdown-item(href='#') Page 3
+
+    a.nav-link(href='#')
+      +md-icon.drawer__icon apps
+      span Portfolio
+
+    a.nav-link(href='#')
+      +md-icon.drawer__icon mail_outline
+      span Contact

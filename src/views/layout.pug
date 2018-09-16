@@ -1,3 +1,5 @@
+include mixins
+
 doctype html
 
 html(
@@ -6,19 +8,17 @@ html(
   itemtype='http://schema.org/WebPage'
   )
   head
-    include includes/head.pug
+    include includes/head
 
   body
-    header
-      .container
-        p some header content
+    include includes/header
 
-    main(role='main')
-      block content
+    main(role='main'): block content
 
-    footer
-      .container
-        p some footer content
+    include includes/footer
+
+    include includes/drawer
+
 
     //-script(
       src='https://code.jquery.com/jquery-3.3.1.slim.min.js'
@@ -30,5 +30,5 @@ html(
       integrity='sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49'
       crossorigin='anonymous'
       )
-    script(src=assets['vendors.js'])
+    //-script(src=assets['vendors.js'])
     script(src=assets['app.js'])

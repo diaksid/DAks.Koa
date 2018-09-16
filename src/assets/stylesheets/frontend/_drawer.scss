@@ -1,11 +1,69 @@
-.mdc-drawer__header {
-  padding: .5rem;
-  canvas {
+$drawer-icon-toggler-bg: str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#777' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"), "#", "%23");
+
+.container {
+  padding-left: calc(#{$grid-gutter-width} / 2 + #{$drawer-min-width} / 2);
+
+  @include media-breakpoint-down(xs) {
+    padding-left: calc(#{$grid-gutter-width} / 2 + #{$drawer-min-width});
+  }
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-width: $drawer-min-width;
+  width: $drawer-max-width;
+  max-width: 90vmin;
+  height: 100%;
+  padding: $spacer 0;
+  border-right: 1px solid rgba(128, 128, 128, .5);
+  background-color: $white;
+  transition-property: transform, width;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-delay: 0s;
+  will-change: transform;
+  -webkit-overflow-scrolling: touch;
+
+  &--mini {
+    width: $drawer-min-width;
+  }
+
+  &__toggler {
+    margin: 0 0 $spacer;
+    padding: 0;
+    outline: none !important;
+    line-height: 1;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  &__icon {
     display: block;
-    margin: 0 auto;
-    max-width: 100%;
-    height: auto;
-    background: url('~images/icon.png') center no-repeat transparent;
-    background-size: cover;
+    box-sizing: content-box;
+    width: $drawer-icon-size;
+    min-width: $drawer-icon-size;
+    height: $drawer-icon-size;
+    margin: 0 $drawer-icon-gutter;
+    /*vertical-align: middle;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;*/
+  }
+
+  .nav-link {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 0;
+  }
+
+  .dropdown-item {
+    padding-left: $drawer-min-width;
+
   }
 }
