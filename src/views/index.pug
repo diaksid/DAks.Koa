@@ -23,11 +23,12 @@ block content
     )
 
     .row.mt-5
-      each val, idx in Array(21)
+      each v, i in Array(21)
         .col-4.mb-4
+          //-p= i
           canvas.lazyload.lazyload--fluid(
-          id=`__${idx + 1}`
-          width=600
-          height=450
-          data-lazy=`https://picsum.photos/600/450?image=${idx * 3 + 1}`
-          )
+            id=`__${i + 1}`
+            width=600
+            height=450
+            data-lazy=`https://picsum.photos/600/450?image=${i * 3 + 1}`
+            )

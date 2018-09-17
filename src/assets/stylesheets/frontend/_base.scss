@@ -1,7 +1,7 @@
-main {
-  padding: 0 0 5rem;
+body {
+  position: relative;
 }
 
-.pro-container {
-  min-height: 100vh;
+main {
+  padding-bottom: 5 * $spacer;
 }

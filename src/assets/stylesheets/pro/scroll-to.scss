@@ -1,0 +1,5 @@
+$scroll-to-data-key: 'scroll' !default;
+
+[data-#{$scroll-to-data-key}]:not(.active) {
+  cursor: pointer;
+}

@@ -22,11 +22,9 @@ $drawer-icon-toggler-bg: str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg
   background-color: $white;
   border-right: 1px solid rgba(128, 128, 128, .5);
   box-shadow: $box-shadow-sm;
-  transition-property: transform, width;
-  transition-duration: 0.2s;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-delay: 0s;
-  will-change: transform;
+  transition: 0.25s 0s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: width;
+  will-change: width;
   -webkit-overflow-scrolling: touch;
 
   &--mini {
@@ -34,11 +32,11 @@ $drawer-icon-toggler-bg: str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg
     box-shadow: none;
   }
 
-  &__toggler {
+  &__toggle {
     padding: $nav-link-padding-y 0 ;
     cursor: pointer;
     color: $gray-500;
-    @include hover {
+    @include hover-focus {
       color: $gray-700;
       background-color: $gray-100;
     }
@@ -58,6 +56,12 @@ $drawer-icon-toggler-bg: str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg
     flex-direction: row;
     align-items: center;
     padding-left: 0;
+    color: darken($link-hover-color, 10%);
+    border-radius: 0;
+    @include hover-focus {
+      color: $white;
+      background-color: lighten($link-hover-color, 10%);
+    }
   }
 
   .dropdown-item {

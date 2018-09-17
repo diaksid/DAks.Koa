@@ -1,9 +1,7 @@
 @import "./variables";
 @import "./base";
-@import "./carousel";
-@import "./header";
-@import "./footer";
-@import "./drawer";
+@import "./includes";
+@import "./partials";
 
 .daks {
   background: url('~images/icon.png') center no-repeat rgba(128, 128, 128, .5);
