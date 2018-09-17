@@ -7,6 +7,7 @@ const MediaQueryPlugin = require('media-query-plugin')
 const WebpackManifestPlugin = require('webpack-manifest-plugin')
 
 const config = require('config')
+const publicPath = `/${config.dir.assets}/`
 
 process.env.BABEL_ENV = 'assets'
 
@@ -47,7 +48,7 @@ module.exports = (env, argv) => {
     },
     output: {
       path: path.join(config.path.public, config.dir.assets),
-      publicPath: `/${config.dir.assets}/`
+      publicPath: publicPath
     },
     resolve: {
       extensions: ['.js', '.json', '.css', '.scss'],
@@ -77,6 +78,16 @@ module.exports = (env, argv) => {
           use: [
             ...cssLoader,
             sassLoader
+          ]
+        },
+        {
+          test: /\.font\.js$/,
+          use: [
+            ...cssLoader,
+            {
+              loader: 'webfonts-loader',
+              options: { publicPath: publicPath }
+            }
           ]
         },
         {
@@ -127,7 +138,7 @@ module.exports = (env, argv) => {
       new MediaQueryPlugin({}),
       new WebpackManifestPlugin({
         fileName: path.join(config.path.build, 'assets.json'),
-        publicPath: `/${config.dir.assets}/`,
+        publicPath: publicPath,
         filter: file => file.isChunk || file.isModuleAsset
       })
     ]

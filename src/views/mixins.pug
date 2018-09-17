@@ -1,2 +1,6 @@
-mixin md-icon
-  span.material-icons(aria-hidden='true')&attributes(attributes): block
+mixin icon(code)
+  //-span.material-icons(aria-hidden='true')&attributes(attributes): block
+  span.icon(
+    class=`icon-${code}`
+    aria-hidden='true'
+    )&attributes(attributes)
