@@ -5,14 +5,14 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const config = require('config')
 
 module.exports = (env, argv) => {
-  process.env.DEBUG = env.DEBUG
+  const debug = process.env.DEBUG = env !== 'production'
 
   return {
     mode: argv.mode,
     context: config.path.app,
     output: {
-      filename: env.DEBUG ? '[name].bundle.js' : '[name].[contenthash:7].bundle.js',
-      chunkFilename: env.DEBUG ? '[name].bundle.js' : '[name].[contenthash:7].bundle.js'
+      filename: debug ? '[name].bundle.js' : '[name].bundle.[contenthash:7].js',
+      chunkFilename: debug ? '[name].js' : '[name].[contenthash:7].bundle.js'
     },
     resolve: {
       modules: [
@@ -21,28 +21,35 @@ module.exports = (env, argv) => {
       ],
       enforceExtension: false
     },
+    node: {
+      fs: 'empty'
+    },
+    performance: {
+      hints: false
+    },
     optimization: {
       minimizer: [
         new UglifyJsPlugin({
+          sourceMap: debug,
           cache: true,
           parallel: true,
-          extractComments: true,
-          sourceMap: true
+          extractComments: !debug
         })
       ]
     },
     plugins: [
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(argv.mode),
-        'process.env.DEBUG': JSON.stringify(env.DEBUG)
+        'process.env.NODE_ENV': JSON.stringify(env),
+        'process.debug': JSON.stringify(debug)
       })
     ],
     stats: {
       colors: true,
-      modules: env.DEBUG,
-      hash: env.DEBUG,
-      reasons: env.DEBUG,
-      warnings: env.DEBUG
+      children: false,
+      modules: debug,
+      hash: debug,
+      reasons: debug,
+      warnings: debug
     }
   }
 }

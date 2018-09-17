@@ -3,12 +3,12 @@ const nodeExternals = require('webpack-node-externals')
 
 const config = require('config')
 
-module.exports = (env = {}, argv) => {
-  if (!env.hasOwnProperty('DEBUG')) {
-    env.DEBUG = argv.hasOwnProperty('debug') ? true : argv.mode !== 'production'
-  }
+process.env.BABEL_ENV = 'server'
 
-  const common = require('./webpack.common.js')(env, argv)
+module.exports = (env, argv) => {
+  process.env.NODE_ENV = env || argv.mode
+
+  const common = require('./webpack.common.js')(process.env.NODE_ENV, argv)
 
   return merge(common, {
     target: 'node',
@@ -34,14 +34,9 @@ module.exports = (env = {}, argv) => {
       rules: [
         {
           test: /\.(js|es6)$/,
-          include: config.path.src,
+          include: [config.path.src],
           exclude: [/node_modules/],
-          use: {
-            loader: 'babel-loader',
-            options: {
-              comments: false
-            }
-          }
+          loader: 'babel-loader'
         }
       ]
     }

@@ -1,0 +1,12 @@
+{
+  "comments": false,
+  "plugins": [],
+  "env": {
+    "assets": {
+      "presets": [
+        ["@babel/preset-env", { "modules": false }]
+      ]
+    },
+    "server": {}
+  }
+}

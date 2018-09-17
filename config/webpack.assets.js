@@ -8,44 +8,29 @@ const WebpackManifestPlugin = require('webpack-manifest-plugin')
 
 const config = require('config')
 
-module.exports = (env = {}, argv) => {
-  if (!env.hasOwnProperty('DEBUG')) {
-    env.DEBUG = argv.hasOwnProperty('debug') ? true : argv.mode !== 'production'
-  }
+process.env.BABEL_ENV = 'assets'
 
-  const cssLoader = {
-    loader: 'css-loader',
-    options: {
-      importLoaders: 1
-    }
-  }
+module.exports = (env, argv) => {
+  process.env.NODE_ENV = env || argv.mode
+  const debug = process.env.NODE_ENV !== 'production'
 
-  const postcssLoader = {
-    loader: 'postcss-loader',
-    options: {
-      ident: 'postcss',
-      plugins: (loader) => [
-        require('postcss-import')({ root: loader.resourcePath }),
-        require('postcss-preset-env')({
-          autoprefixer: {
-            cascade: false,
-            grid: true
-          }
-        }),
-        require('css-mqpacker')({ sort: false }),
-        require('cssnano')({
-          preset: ['default', {
-            discardComments: { removeAll: !env.DEBUG },
-            normalizeWhitespace: { exclude: env.DEBUG }
-          }]
-        })
-      ]
-    }
-  }
+  const cssLoader = [
+    MiniCssExtractPlugin.loader,
+    {
+      loader: 'css-loader',
+      options: {
+        sourceMap: debug,
+        importLoaders: 1
+      }
+    },
+    MediaQueryPlugin.loader,
+    'postcss-loader'
+  ]
 
   const sassLoader = {
     loader: 'sass-loader',
     options: {
+      sourceMap: debug,
       includePaths: [
         config.path.assets,
         path.resolve(config.path.app, 'node_modules')
@@ -53,7 +38,7 @@ module.exports = (env = {}, argv) => {
     }
   }
 
-  const common = require('./webpack.common.js')(env, argv)
+  const common = require('./webpack.common.js')(process.env.NODE_ENV, argv)
 
   return merge(common, {
     target: 'web',
@@ -74,40 +59,23 @@ module.exports = (env = {}, argv) => {
         'static': config.path.static
       }
     },
-    devtool: 'source-map',
+    devtool: debug && 'source-map',
     module: {
       rules: [
         {
           test: /\.(js|es6)$/,
-          include: config.path.assets,
-          exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              comments: false,
-              presets: [
-                ['@babel/preset-env', { modules: false }]
-              ],
-              plugins: []
-            }
-          }
+          include: [config.path.assets],
+          exclude: [/node_modules/],
+          loader: 'babel-loader'
         },
         {
           test: /\.css$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            cssLoader,
-            MediaQueryPlugin.loader,
-            postcssLoader
-          ]
+          use: cssLoader
         },
         {
           test: /\.scss$/,
           use: [
-            MiniCssExtractPlugin.loader,
-            cssLoader,
-            MediaQueryPlugin.loader,
-            postcssLoader,
+            ...cssLoader,
             sassLoader
           ]
         },
@@ -116,14 +84,14 @@ module.exports = (env = {}, argv) => {
           loader: 'url-loader',
           options: {
             limit: 8192,
-            name: env.DEBUG ? '[name].[ext]' : '[name].[hash:7].[ext]'
+            name: debug ? '[name].[ext]' : '[name].[hash:7].[ext]'
           }
         },
         {
           test: /\.(wav|mp3)$/,
           loader: 'file-loader',
           options: {
-            name: env.DEBUG ? '[name].[ext]' : '[name].[hash:7].[ext]'
+            name: debug ? '[name].[ext]' : '[name].[hash:7].[ext]'
           }
         }
       ]
@@ -147,14 +115,14 @@ module.exports = (env = {}, argv) => {
         `${config.path.public}/**`
       ], {
         root: config.path.app,
-        verbose: env.DEBUG
+        verbose: debug
       }),
       new CopyWebpackPlugin([
         { from: config.dir.static, to: config.path.public }
       ], {}),
       new MiniCssExtractPlugin({
-        filename: env.DEBUG ? '[name].bundle.css' : '[name].[contenthash:7].bundle.css',
-        chunkFilename: env.DEBUG ? '[id].css' : '[id].[contenthash:7].css'
+        filename: debug ? '[name].bundle.css' : '[name].bundle.[contenthash:7].css',
+        chunkFilename: debug ? '[name].css' : '[name].[contenthash:7].css'
       }),
       new MediaQueryPlugin({}),
       new WebpackManifestPlugin({
