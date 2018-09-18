@@ -2,21 +2,17 @@ aside.drawer.drawer--mini
   nav.nav.nav-pills.flex-column
     .drawer__toggle: +icon('menu').drawer__icon
 
-    .btn.btn-link.nav-link.dropdown-toggle(
-    data-toggle='collapse'
-    data-target='#homeSubmenu'
-    aria-expanded='false'
-    )
+    .btn.btn-link.nav-link(data-scroll-to='#_00')
       +icon('apps').drawer__icon
       span Home
-    #homeSubmenu.collapse
-      .btn.btn-link.dropdown-item Home 1
-      .btn.btn-link.dropdown-item Home 2
-      .btn.btn-link.dropdown-item Home 3
 
-    .btn.btn-link.nav-link
+    .btn.btn-link.nav-link(data-scroll-to='#_01')
       +icon('apps').drawer__icon
       span About
+
+    .btn.btn-link.nav-link(data-scroll-to='#_02')
+      +icon('apps').drawer__icon
+      span Portfolio
 
     .btn.btn-link.nav-link.dropdown-toggle(
     data-toggle='collapse'
@@ -31,13 +27,9 @@ aside.drawer.drawer--mini
       .btn.btn-link.dropdown-item Page 2
       .btn.btn-link.dropdown-item Page 3
 
-    .btn.btn-link.nav-link
-      +icon('apps').drawer__icon
-      span Portfolio
-
     .btn.btn-link.nav-link(
     data-toggle='modal'
-    data-target='.pro-modal-mail'
+    data-target='.modal-mail'
     )
       +icon('mail_outline').drawer__icon
       span Contact

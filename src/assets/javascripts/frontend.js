@@ -1,17 +1,14 @@
 import $ from 'jquery'
-import './pro/float_to_top'
+import ScrollSign from './pro/scroll_sign'
 import './pro/scroll_to'
 import './pro/lazyload'
 import './pro/lightbox'
 
-($ => {
-  const SCROLL_TO_TOP = 1000
+(($, ScrollSign) => {
+  $.scrollSign()
 
   $(() => {
     $.scrollTo()
-    // $('[data-scroll]').scrollTo()
-
-    $('[data-light]').lightbox()
 
     const $draver = $('.drawer')
     const $draverCheck = () => {
@@ -23,29 +20,24 @@ import './pro/lightbox'
       $draverCheck()
     })
     $draver.find('.dropdown-toggle').click(() => $draver.removeClass('drawer--mini'))
+
+    $.lightbox()
+      .on('open', ScrollSign.hide)
+      .on('close', ScrollSign.show)
+
+    $('.modal')
+      .on('show.bs.modal', ScrollSign.hide)
+      .on('hidden.bs.modal', ScrollSign.show)
   })
-
-  $.floatToTop()
-
-  const $toTop = $('.scroll-to-top')
-
-  function scrollToTop () {
-    if (window.pageYOffset > SCROLL_TO_TOP) {
-      $toTop.addClass('show')
-    } else {
-      $toTop.removeClass('show')
-    }
-  }
 
   window.addEventListener('load', () => {
-    $('[data-lazy]', 'main').lazyload()
+    $.lazyload()
     $(document.querySelectorAll('[data-carousel-lazy]')).lazyload('.carousel', 'slid.bs.carousel', {
-      attribute: 'carouselLazy'
+      attribute: 'carousel-lazy'
     })
-    scrollToTop()
   })
-
+  /*
   window.addEventListener('scroll', () => {
-    scrollToTop()
   })
-})($)
+  */
+})($, ScrollSign)

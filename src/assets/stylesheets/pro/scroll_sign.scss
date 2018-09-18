@@ -1,6 +1,6 @@
-$float-to-top-data-key: 'float-to-top' !default;
+$scroll-sign-data-key: 'scroll-sign' !default;
 
-[data-#{$float-to-top-data-key}] {
+[data-#{$scroll-sign-data-key}] {
   position: fixed;
   z-index: $zindex-fixed;
   right: 2 * $spacer;

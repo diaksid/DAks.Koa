@@ -1,11 +1,18 @@
 import jQuery from 'jquery'
+import Util from './util'
 
-const Lightbox = (jQuery => {
+const Lightbox = ((jQuery, Util, document) => {
   const NAME = 'lightbox'
   const VERSION = '0.0.1'
 
   const DATA_KEY = 'lightbox'
+  const EVENT_KEY = `${DATA_KEY}.`
   const JQUERY_NO_CONFLICT = jQuery.fn[NAME]
+
+  const Events = {
+    'OPEN': `${EVENT_KEY}open`,
+    'CLOSE': `${EVENT_KEY}close`
+  }
 
   const Default = {
     attribute: 'light',
@@ -13,12 +20,12 @@ const Lightbox = (jQuery => {
     delayShow: 250,
     delayHide: 250,
     delayStep: 250,
-    onerror: 'data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="%23c33" enable-background="new 0 0 512 512"%3E%3Cpath d="m256 96q44 0 80 21 37 21 58 58 21 37 21 80t-21 80q-21 37-58 58-37 21-80 21t-80-21q-37-21-58-58-21-37-21-80t21-80q21-37 58-58 37-21 80-21zm27 261v-40q0-3-2-5-2-2-5-2h-40q-3 0-5 2-2 2-2 5v40q0 3 2 5 2 2 5 2h40q3 0 5-2 2-2 2-5zm-0.4-72 4-130q0-3-2-4-2-2-5-2h-46q-3 0-5 2-2 1-2 4l4 130q0 2 2 4 2 2 5 2h39q3 0 5-2 2-2 2-4z"/%3E%3C/svg%3E'
+    onerror: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512' fill='%23c33' enable-background='new 0 0 512 512'%3E%3Cpath d='m256 96q44 0 80 21 37 21 58 58 21 37 21 80t-21 80q-21 37-58 58-37 21-80 21t-80-21q-37-21-58-58-21-37-21-80t21-80q21-37 58-58 37-21 80-21zm27 261v-40q0-3-2-5-2-2-5-2h-40q-3 0-5 2-2 2-2 5v40q0 3 2 5 2 2 5 2h40q3 0 5-2 2-2 2-5zm-0.4-72 4-130q0-3-2-4-2-2-5-2h-46q-3 0-5 2-2 1-2 4l4 130q0 2 2 4 2 2 5 2h39q3 0 5-2 2-2 2-4z'/%3E%3C/svg%3E"
   }
 
   class Lightbox {
     constructor (options) {
-      this._options = jQuery.extend({}, Lightbox.default, options)
+      this._options = jQuery.extend({}, Default, options)
       this._stack = {}
       this._group = null
       this._index = 0
@@ -26,10 +33,10 @@ const Lightbox = (jQuery => {
     }
 
     _load (element) {
-      if (!element.dataset[DATA_KEY]) {
+      if (!Util.getDataSet(element, DATA_KEY)) {
         const path = element.getAttribute('href') || element.dataset.href || element.getAttribute('src')
         if (path) {
-          const group = (path[0] === '#') ? 'html' : element.dataset[this._options.attribute]
+          const group = (path[0] === '#') ? 'html' : Util.getDataSet(element, this._options.attribute)
           if (group && group !== 'html' && group !== 'ajax') {
             if (!this._stack[group]) {
               this._stack[group] = []
@@ -51,7 +58,7 @@ const Lightbox = (jQuery => {
           })
           element.style.cursor = 'pointer'
         }
-        element.dataset[DATA_KEY] = 'loaded'
+        Util.setDataSet(element, DATA_KEY, 'loaded')
       }
     }
 
@@ -61,7 +68,7 @@ const Lightbox = (jQuery => {
       Lightbox._prev.hide()
       const element = jQuery(this._stack[this._group][this._index])[0]
       if (element) {
-        Lightbox._content.addClass(`${DATA_KEY}-content--html`)
+        Lightbox._content.addClass(`${Lightbox._dataKey}-content--html`)
         Lightbox._modal
           .html(element.innerHTML)
           .show()
@@ -71,7 +78,7 @@ const Lightbox = (jQuery => {
 
     _draw (step) {
       Lightbox._modal.hide()
-      Lightbox._content.removeClass(`${DATA_KEY}-content--html`)
+      Lightbox._content.removeClass(`${Lightbox._dataKey}-content--html`)
       if (this._group && this._stack[this._group].length > 1) {
         Lightbox._next.show()
         Lightbox._prev.show()
@@ -84,6 +91,7 @@ const Lightbox = (jQuery => {
       if (element.complete) {
         this._show(step)
       } else {
+        Lightbox._loading()
         element.onerror = () => {
           element.src = this._stack[this._group][this._index] = this._options.onerror
         }
@@ -121,27 +129,36 @@ const Lightbox = (jQuery => {
       this._hide(() => this._draw(true))
     }
 
+    static on (event, handler) {
+      document.addEventListener(Events[event.toUpperCase()], handler)
+      return this
+    }
+
     static _init (instance) {
       if (!this._overlay) {
+        this._events = {}
+        for (let event in Events) {
+          this._events[event] = new Event(Events[event])
+        }
         this._overlay = jQuery('<div>')
-          .addClass(`${DATA_KEY}-overlay`)
+          .addClass(`${this._dataKey}-overlay`)
           .hide()
         this._content = jQuery('<div>')
-          .addClass(`${DATA_KEY}-content`)
+          .addClass(`${this._dataKey}-content`)
           .click(event => event.stopPropagation())
         this._modal = jQuery('<div>')
-          .addClass(`${DATA_KEY}-modal`)
+          .addClass(`${this._dataKey}-modal`)
           .hide()
         this._image = jQuery('<img>')
-          .addClass(`${DATA_KEY}-image`)
+          .addClass(`${this._dataKey}-image`)
           .hide()
         this._next = jQuery('<div>')
-          .addClass(`${DATA_KEY}-next`)
+          .addClass(`${this._dataKey}-next`)
           .hide()
         this._prev = jQuery('<div>')
-          .addClass(`${DATA_KEY}-prev`)
+          .addClass(`${this._dataKey}-prev`)
           .hide()
-        this._close = jQuery('<div>').addClass(`${DATA_KEY}-close`)
+        this._close = jQuery('<div>').addClass(`${this._dataKey}-close`)
         this._content
           .append(this._modal)
           .append(this._image)
@@ -168,6 +185,7 @@ const Lightbox = (jQuery => {
     }
 
     static _show (delay, step) {
+      this._loading(true)
       if (step) {
         this._content.fadeIn(delay)
       } else {
@@ -176,6 +194,7 @@ const Lightbox = (jQuery => {
           overflow: 'hidden'
         })
         this._overlay.fadeIn(delay)
+        document.dispatchEvent(this._events.OPEN)
       }
     }
 
@@ -188,8 +207,21 @@ const Lightbox = (jQuery => {
             paddingRight: '',
             overflow: ''
           })
+          document.dispatchEvent(this._events.CLOSE)
         })
       }
+    }
+
+    static _loading (done) {
+      if (done) {
+        this._overlay.removeClass(`${this._dataKey}-overlay--load`)
+      } else {
+        this._overlay.addClass(`${this._dataKey}-overlay--load`)
+      }
+    }
+
+    static get _dataKey () {
+      return Util.toDataKey(DATA_KEY)
     }
 
     static get version () {
@@ -200,8 +232,8 @@ const Lightbox = (jQuery => {
       return Default
     }
 
-    static _jQuery (options) {
-      const instance = new Lightbox(options)
+    static _jQuery () {
+      const instance = new Lightbox(...arguments)
       return this.each(function () {
         instance._load(this)
       })
@@ -214,8 +246,12 @@ const Lightbox = (jQuery => {
     jQuery.fn[NAME] = JQUERY_NO_CONFLICT
     return Lightbox._jQuery
   }
+  jQuery[NAME] = (...args) => {
+    jQuery(`[data-${Util.toDataKey(Default.attribute)}]`)[NAME](...args)
+    return Lightbox
+  }
 
   return Lightbox
-})(jQuery)
+})(jQuery, Util, document)
 
 export default Lightbox

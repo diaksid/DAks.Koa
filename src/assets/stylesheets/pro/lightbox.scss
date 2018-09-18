@@ -12,9 +12,12 @@ $lightbox-data-key: 'lightbox' !default;
     right: 0;
     bottom: 0;
     left: 0;
-    text-align: center;
-    background-color: rgba(0, 0, 0, .5);
+    background: center no-repeat rgba(0, 0, 0, .5);
     cursor: pointer;
+    &--load {
+      background-size: 10%;
+      background-image: url("~static/images/loading/0.svg");
+    }
   }
 
   &-content {

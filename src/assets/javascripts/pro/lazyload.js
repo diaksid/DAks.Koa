@@ -1,6 +1,7 @@
 import jQuery from 'jquery'
+import Util from './util'
 
-const Lazyload = (jQuery => {
+const Lazyload = ((jQuery, Util) => {
   const NAME = 'lazyload'
   const VERSION = '0.0.3'
   const JQUERY_NO_CONFLICT = jQuery.fn[NAME]
@@ -16,8 +17,8 @@ const Lazyload = (jQuery => {
     before: null,
     after: null,
     reset: '',
-    mask: 'data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"%3E%3Cpath fill="%23aaa" d="m204 203q0 13-9 22t-22 9-22-9-9-22 9-22 22-9 22 9 9 22zm170 64v74h-234v-32l53-53 26 26 85-85zm16-117h-266q-2 0-4 1-1 1-1 4v202q0 2 1 4 1 1 4 1h266q2 0 4-1 1-1 1-4v-202q0-2-1-4-1-1-4-1zm26 5v202q0 11-8 19t-19 8h-266q-11 0-19-8t-8-19v-202q0-11 8-19t19-8h266q11 0 19 8t8 19z"/%3E%3C/svg%3E'
-    // mask: 'data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg"%3E%3Crect fill="%23ccc" fill-opacity=".2" height="100%" width="100%"/%3E%3C/svg%3E'
+    // mask: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Crect fill='%23ccc' fill-opacity='.2' height='100%' width='100%'/%3E%3C/svg%3E"
+    mask: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cpath fill='%23aaa' d='m204 203q0 13-9 22t-22 9-22-9-9-22 9-22 22-9 22 9 9 22zm170 64v74h-234v-32l53-53 26 26 85-85zm16-117h-266q-2 0-4 1-1 1-1 4v202q0 2 1 4 1 1 4 1h266q2 0 4-1 1-1 1-4v-202q0-2-1-4-1-1-4-1zm26 5v202q0 11-8 19t-19 8h-266q-11 0-19-8t-8-19v-202q0-11 8-19t19-8h266q11 0 19 8t8 19z'/%3E%3C/svg%3E"
   }
 
   class Lazyload {
@@ -29,7 +30,7 @@ const Lazyload = (jQuery => {
         options = event
         event = null
       }
-      this._options = jQuery.extend({}, Lazyload.default, options)
+      this._options = jQuery.extend({}, Default, options)
       this._scope = scope && jQuery(scope)
       this._event = event || 'scroll'
       if (this._scope) {
@@ -45,7 +46,8 @@ const Lazyload = (jQuery => {
 
     _load (element) {
       const item = new Lazy(element, this._options)
-      item._appear() || this._items.push(item)
+      item._appear()
+      this._items.push(item)
       return this
     }
 
@@ -64,6 +66,7 @@ const Lazyload = (jQuery => {
 
     _reset () {
       this._items.forEach(item => item._reset())
+      this._items = []
       return this
     }
 
@@ -95,7 +98,7 @@ const Lazyload = (jQuery => {
     }
 
     _appear () {
-      let res = ['loading', 'loaded', 'error'].indexOf(this._key) >= 0
+      let res = ['loading', 'loaded', 'error', 'reset'].indexOf(this._dataKey) >= 0
       if (!res) {
         res = !this._above() && !this._below() && !this._right() && !this._left()
         if (res) {
@@ -110,29 +113,28 @@ const Lazyload = (jQuery => {
     }
 
     _loader () {
-      const data = this._element.dataset[this._options.attribute]
-      this._key = 'loading'
+      const path = Util.getDataSet(this._element, this._options.attribute)
+      this._dataKey = 'loading'
       if (this._options.mask) {
         if (this._element.tagName === 'IMG') {
           this._element.src = this._options.mask
         } else {
-          // TODO: backgroundImage mask
-          // this.el.style.backgroundImage = `url("${this._options.mask}")`
+          this._element.style.backgroundImage = `url("${this._options.mask}")`
         }
       }
       const img = new Image()
       img.onload = () => {
         if (this._element.tagName === 'IMG') {
-          this._element.src = data
+          this._element.src = path
         } else {
-          this._element.style.backgroundImage = `url(${data})`
+          this._element.style.backgroundImage = `url(${path})`
         }
         setTimeout(this._animate.bind(this), this._delay)
       }
       img.onerror = () => {
-        this._key = 'error'
+        this._dataKey = 'error'
       }
-      img.src = data
+      img.src = path
       return this
     }
 
@@ -177,7 +179,7 @@ const Lazyload = (jQuery => {
     }
 
     _animate () {
-      this._key = 'loaded'
+      this._dataKey = 'loaded'
       this._obj
         .hide()
         .fadeIn(
@@ -193,15 +195,16 @@ const Lazyload = (jQuery => {
       } else {
         this._element.style.backgroundImage = `url("${this._options.mask}")`
       }
-      this._key = null
+      this._dataKey = 'reset'
+      delete this
     }
 
-    get _key () {
-      return this._element.dataset[DATA_KEY]
+    get _dataKey () {
+      return Util.getDataSet(this._element, DATA_KEY)
     }
 
-    set _key (val) {
-      return (this._element.dataset[DATA_KEY] = val)
+    set _dataKey (value) {
+      return Util.setDataSet(this._element, DATA_KEY, value)
     }
   }
 
@@ -211,8 +214,12 @@ const Lazyload = (jQuery => {
     jQuery.fn[NAME] = JQUERY_NO_CONFLICT
     return Lazyload._jQuery
   }
+  jQuery[NAME] = (...args) => {
+    jQuery(`[data-${Util.toDataKey(Default.attribute)}]`)[NAME](...args)
+    return Lazyload
+  }
 
   return Lazyload
-})(jQuery)
+})(jQuery, Util)
 
 export default Lazyload

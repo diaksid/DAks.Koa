@@ -1,5 +1,3 @@
-const debug = process.env.NODE_ENV !== 'production'
-
 module.exports = {
   files: [
     './icons/*.svg'
@@ -9,9 +7,9 @@ module.exports = {
   classPrefix: 'icon-',
   baseSelector: '.icon',
   types: ['eot', 'woff', 'woff2', 'ttf', 'svg'],
-  fileName: debug ? '[fontname].[ext]' : '[fontname].[hash:7].[ext]',
+  fileName: '[fontname].[hash:7].[ext]',
   emitCodepoints: {
-    fileName: debug ? '[fontname].codepoints.json' : '[fontname].codepoints.[hash:7].json',
+    fileName: '[fontname].codepoints.[hash:7].json',
     type: 'json'
   }
 }

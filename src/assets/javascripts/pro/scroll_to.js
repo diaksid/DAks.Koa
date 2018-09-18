@@ -1,10 +1,11 @@
 import jQuery from 'jquery'
+import Util from './util'
 
-const ScrollTo = (jQuery => {
+const ScrollTo = ((jQuery, Util) => {
   const NAME = 'scrollTo'
   const VERSION = '0.0.1'
 
-  const DATA_KEY = 'scroll'
+  const DATA_KEY = 'scroll.to'
   const JQUERY_NO_CONFLICT = jQuery.fn[NAME]
 
   const Default = {
@@ -13,20 +14,24 @@ const ScrollTo = (jQuery => {
   }
 
   class ScrollTo {
-    constructor () {
+    constructor (options, callback) {
       [this._options, this._callback] = arguments
     }
 
     _load (element) {
-      const selector = element.dataset[DATA_KEY] || element.getAttribute('href')
+      const selector = Util.getDataSet(element, DATA_KEY) || element.getAttribute('href')
       if (selector) {
+        const options = jQuery.extend({},
+          this._options,
+          Util.getDataSet(element, DATA_KEY, ...Object.keys(Default))
+        )
         const obj = jQuery(element).click(event => {
           event.preventDefault()
           event.stopPropagation()
           if (!obj.hasClass('active') && !obj.parent().hasClass('active')) {
             selector === '#'
-              ? ScrollTo.top(this._options, this._callback)
-              : ScrollTo.obj(selector, this._options, this._callback)
+              ? ScrollTo.top(options, this._callback)
+              : ScrollTo.obj(selector, options, this._callback)
           }
         })
       } else {
@@ -36,14 +41,18 @@ const ScrollTo = (jQuery => {
 
     static top () {
       const [options, callback] = this._config(...arguments)
-      this._scrolled.animate({ scrollTop: options.offset }, options.duration, callback)
+      this._scrolled.animate({
+        scrollTop: parseInt(options.offset)
+      }, parseInt(options.duration), callback)
       return this
     }
 
     static obj (selector, ...args) {
       const [options, callback] = this._config(...args)
       const obj = selector instanceof jQuery ? selector : jQuery(selector)
-      this._scrolled.animate({ scrollTop: obj.offset().top - options.offset }, options.duration, callback)
+      this._scrolled.animate({
+        scrollTop: obj.offset().top - parseInt(options.offset)
+      }, parseInt(options.duration), callback)
       return this
     }
 
@@ -55,8 +64,8 @@ const ScrollTo = (jQuery => {
         options = { offset: options }
       }
       return [
-        jQuery.extend({}, this.default, options),
-        typeof callback === 'function' ? callback : false
+        jQuery.extend({}, Default, options),
+        typeof callback === 'function' ? callback : null
       ]
     }
 
@@ -72,8 +81,8 @@ const ScrollTo = (jQuery => {
       return Default
     }
 
-    static _jQuery (options) {
-      const instance = new ScrollTo(options)
+    static _jQuery () {
+      const instance = new ScrollTo(...arguments)
       return this.each(function () {
         instance._load(this)
       })
@@ -86,9 +95,12 @@ const ScrollTo = (jQuery => {
     jQuery.fn[NAME] = JQUERY_NO_CONFLICT
     return ScrollTo._jQuery
   }
-  jQuery[NAME] = () => jQuery(`[data-${DATA_KEY}]`)[NAME]()
+  jQuery[NAME] = (...args) => {
+    jQuery(`[data-${Util.toDataKey(DATA_KEY)}]`)[NAME](...args)
+    return ScrollTo
+  }
 
   return ScrollTo
-})(jQuery)
+})(jQuery, Util)
 
 export default ScrollTo

@@ -21,6 +21,11 @@ $lazyload-data-key: 'lazyload' !default;
     background-size: cover;
   }
 
+  &[data-#{$lazyload-data-key}=reset] {
+    background-size: contain;
+    // background-image: url("~static/images/system/image.svg");
+  }
+
   &--fluid {
     max-width: 100%;
     height: auto;

@@ -132,8 +132,8 @@ module.exports = (env, argv) => {
         { from: config.dir.static, to: config.path.public }
       ], {}),
       new MiniCssExtractPlugin({
-        filename: debug ? '[name].bundle.css' : '[name].bundle.[contenthash:7].css',
-        chunkFilename: debug ? '[name].css' : '[name].[contenthash:7].css'
+        filename: '[name].bundle.[contenthash:7].css',
+        chunkFilename: '[name].[contenthash:7].css'
       }),
       new MediaQueryPlugin({}),
       new WebpackManifestPlugin({
