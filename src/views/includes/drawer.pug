@@ -2,16 +2,25 @@ aside.drawer.drawer--mini
   nav.nav.nav-pills.flex-column
     .drawer__toggle: +icon('menu').drawer__icon
 
-    .btn.btn-link.nav-link(data-scroll-to='#_00')
+    a.btn.btn-link.nav-link(
+    href='#_00'
+    data-scroll-to
+    )
       +icon('apps').drawer__icon
       span Home
 
-    .btn.btn-link.nav-link(data-scroll-to='#_01')
-      +icon('apps').drawer__icon
+    a.btn.btn-link.nav-link(
+    href='#_01'
+    data-scroll-to
+    )
+      +icon('security').drawer__icon
       span About
 
-    .btn.btn-link.nav-link(data-scroll-to='#_02')
-      +icon('apps').drawer__icon
+    a.btn.btn-link.nav-link(
+    href='#_02'
+    data-scroll-to
+    )
+      +icon('important_devices').drawer__icon
       span Portfolio
 
     .btn.btn-link.nav-link.dropdown-toggle(
@@ -20,7 +29,7 @@ aside.drawer.drawer--mini
     aria-expanded='false'
     class='dropdown-toggle'
     )
-      +icon('apps').drawer__icon
+      +icon('import_contacts').drawer__icon
       span Pages
     #pageSubmenu.collapse
       .btn.btn-link.dropdown-item Page 1

@@ -1,4 +1,4 @@
-- n = 5
+- n = 4
 .carousel.slide(
 data-ride='carousel'
 data-interval='10000'
@@ -15,6 +15,15 @@ data-pause
     each v, i in Array(n)
       .carousel-item(class=(i === 0 && 'active'))
         //-.lazyload(data-carousel-lazy=`https://picsum.photos/600/450?image=${Math.floor(Math.random() * 49) + 1}`)
+        case i
+          when 0
+            .p-5: +icon('__logo')(style='display:block;font-size:20vmin')
+          when 1
+            .p-5: +icon('apps')(style='display:block;font-size:35vmin')
+          when 2
+            .p-5: +icon('security')(style='display:block;font-size:35vmin')
+          when 3
+            .p-5: +icon('important_devices')(style='display:block;font-size:35vmin')
         .carousel-caption.d-none.d-md-block
           h5 Slide #{i + 1}
           p Lorem ipsum dolor sit amet, consectetur adipiscing elit.

@@ -2,6 +2,7 @@ const path = require('path')
 const merge = require('webpack-merge')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const SpriteLoaderPlugin = require('svg-sprite-loader/plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const MediaQueryPlugin = require('media-query-plugin')
 const WebpackManifestPlugin = require('webpack-manifest-plugin')
@@ -92,17 +93,26 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|eot|ttf)$/,
+          exclude: [path.join(config.path.assets, 'sprite')],
           loader: 'url-loader',
           options: {
             limit: 8192,
-            name: debug ? '[name].[ext]' : '[name].[hash:7].[ext]'
+            name: '[name].[hash:7].[ext]'
+          }
+        },
+        {
+          test: /\.svg$/,
+          include: [path.join(config.path.assets, 'sprite')],
+          loader: 'svg-sprite-loader',
+          options: {
+            extract: false
           }
         },
         {
           test: /\.(wav|mp3)$/,
           loader: 'file-loader',
           options: {
-            name: debug ? '[name].[ext]' : '[name].[hash:7].[ext]'
+            name: '[name].[hash:7].[ext]'
           }
         }
       ]
@@ -131,6 +141,7 @@ module.exports = (env, argv) => {
       new CopyWebpackPlugin([
         { from: config.dir.static, to: config.path.public }
       ], {}),
+      new SpriteLoaderPlugin({}),
       new MiniCssExtractPlugin({
         filename: '[name].bundle.[contenthash:7].css',
         chunkFilename: '[name].[contenthash:7].css'

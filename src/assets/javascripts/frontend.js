@@ -35,6 +35,9 @@ import './pro/lightbox'
     $(document.querySelectorAll('[data-carousel-lazy]')).lazyload('.carousel', 'slid.bs.carousel', {
       attribute: 'carousel-lazy'
     })
+    $(document.body).scrollspy({
+      target: '.drawer'
+    })
   })
   /*
   window.addEventListener('scroll', () => {

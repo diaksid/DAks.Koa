@@ -27,9 +27,12 @@ const Lightbox = ((jQuery, Util, document) => {
     constructor (options) {
       this._options = jQuery.extend({}, Default, options)
       this._stack = {}
-      this._group = null
-      this._index = 0
+      // this._group = this._path = null
       Lightbox._init(this)
+    }
+
+    get _index () {
+      return this._group && this._stack[this._group].indexOf(this._path)
     }
 
     _load (element) {
@@ -37,7 +40,7 @@ const Lightbox = ((jQuery, Util, document) => {
         const path = element.getAttribute('href') || element.dataset.href || element.getAttribute('src')
         if (path) {
           const group = (path[0] === '#') ? 'html' : Util.getDataSet(element, this._options.attribute)
-          if (group && group !== 'html' && group !== 'ajax') {
+          if (group && group !== 'html') {
             if (!this._stack[group]) {
               this._stack[group] = []
             }
@@ -48,9 +51,9 @@ const Lightbox = ((jQuery, Util, document) => {
           jQuery(element).click(event => {
             event.preventDefault()
             event.stopPropagation()
+            this._path = path
             this._group = group
-            this._index = this._stack[this._group].indexOf(path)
-            if (group === 'html') {
+            if (this._group === 'html') {
               this._html()
             } else {
               this._draw()
@@ -66,7 +69,7 @@ const Lightbox = ((jQuery, Util, document) => {
       Lightbox._image.hide()
       Lightbox._next.hide()
       Lightbox._prev.hide()
-      const element = jQuery(this._stack[this._group][this._index])[0]
+      const element = jQuery(this._path)[0]
       if (element) {
         Lightbox._content.addClass(`${Lightbox._dataKey}-content--html`)
         Lightbox._modal
@@ -87,13 +90,16 @@ const Lightbox = ((jQuery, Util, document) => {
         Lightbox._prev.hide()
       }
       const element = Lightbox._image[0]
-      element.src = this._stack[this._group][this._index]
+      element.src = this._path
       if (element.complete) {
         this._show(step)
       } else {
         Lightbox._loading()
         element.onerror = () => {
-          element.src = this._stack[this._group][this._index] = this._options.onerror
+          element.src = this._options.onerror
+          if (this._group) {
+            this._stack[this._group][this._index] = this._options.onerror
+          }
         }
         element.onload = () => this._show(step)
       }
@@ -113,19 +119,21 @@ const Lightbox = ((jQuery, Util, document) => {
     }
 
     _step (next) {
+      let index = this._index
       if (next) {
-        if (this._index < this._stack[this._group].length - 1) {
-          ++this._index
+        if (index < this._stack[this._group].length - 1) {
+          ++index
         } else {
-          this._index = 0
+          index = 0
         }
       } else {
-        if (this._index > 0) {
-          --this._index
+        if (index > 0) {
+          --index
         } else {
-          this._index = this._stack[this._group].length - 1
+          index = this._stack[this._group].length - 1
         }
       }
+      this._path = this._stack[this._group][index]
       this._hide(() => this._draw(true))
     }
 

@@ -1,13 +1,19 @@
 import jQuery from 'jquery'
 import Util from './util'
 
-const Lazyload = ((jQuery, Util) => {
+const Lazyload = ((jQuery, Util, window, document) => {
   const NAME = 'lazyload'
   const VERSION = '0.0.3'
   const JQUERY_NO_CONFLICT = jQuery.fn[NAME]
 
   const DATA_KEY = 'lazyload'
-  const EVENT_KEY = `pro.${DATA_KEY}`
+  const EVENT_KEY = `${DATA_KEY}.`
+
+  const Events = {
+    'UPDATE': `${EVENT_KEY}update`,
+    'RESET': `${EVENT_KEY}reset`,
+    'APPEAR': `${EVENT_KEY}appear`
+  }
 
   const Default = {
     attribute: 'lazy',
@@ -17,8 +23,8 @@ const Lazyload = ((jQuery, Util) => {
     before: null,
     after: null,
     reset: '',
-    // mask: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Crect fill='%23ccc' fill-opacity='.2' height='100%' width='100%'/%3E%3C/svg%3E"
     mask: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cpath fill='%23aaa' d='m204 203q0 13-9 22t-22 9-22-9-9-22 9-22 22-9 22 9 9 22zm170 64v74h-234v-32l53-53 26 26 85-85zm16-117h-266q-2 0-4 1-1 1-1 4v202q0 2 1 4 1 1 4 1h266q2 0 4-1 1-1 1-4v-202q0-2-1-4-1-1-4-1zm26 5v202q0 11-8 19t-19 8h-266q-11 0-19-8t-8-19v-202q0-11 8-19t19-8h266q11 0 19 8t8 19z'/%3E%3C/svg%3E"
+    // mask: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Crect fill='%23ccc' fill-opacity='.2' height='100%' width='100%'/%3E%3C/svg%3E"
   }
 
   class Lazyload {
@@ -38,6 +44,8 @@ const Lazyload = ((jQuery, Util) => {
       }
       window.addEventListener('scroll', this._update.bind(this))
       window.addEventListener('resize', this._update.bind(this))
+      document.addEventListener(Events.UPDATE, this._update.bind(this))
+      document.addEventListener(Events.RESET, this._reset.bind(this))
       if (this._options.reset) {
         document.addEventListener(this._options.reset, this._reset.bind(this))
       }
@@ -60,6 +68,7 @@ const Lazyload = ((jQuery, Util) => {
         }
         window.removeEventListener('scroll', this._update)
         window.removeEventListener('resize', this._update)
+        document.removeEventListener(Events.UPDATE, this._update.bind(this))
       }
       return this
     }
@@ -68,6 +77,14 @@ const Lazyload = ((jQuery, Util) => {
       this._items.forEach(item => item._reset())
       this._items = []
       return this
+    }
+
+    static update () {
+      return document.dispatchEvent(new Event(Events.UPDATE))
+    }
+
+    static reset () {
+      return document.dispatchEvent(new Event(Events.RESET))
     }
 
     static get version () {
@@ -94,7 +111,7 @@ const Lazyload = ((jQuery, Util) => {
       this._options = options
       this._delay = this._element.dataset[`${this._options.attribute}Delay`] || this._options.delay
       this._duration = this._element.dataset[`${this._options.attribute}Duration`] || this._options.duration
-      this._obj.on(EVENT_KEY, this._appear.bind(this))
+      this._obj.on(Events.APPEAR, this._appear.bind(this))
     }
 
     _appear () {
@@ -106,7 +123,7 @@ const Lazyload = ((jQuery, Util) => {
             this._options.before.call(this._element)
           }
           this._loader()
-          this._obj.off('lazyload', this._appear)
+          this._obj.off(Events.APPEAR, this._appear)
         }
       }
       return res
@@ -220,6 +237,6 @@ const Lazyload = ((jQuery, Util) => {
   }
 
   return Lazyload
-})(jQuery, Util)
+})(jQuery, Util, window, document)
 
 export default Lazyload

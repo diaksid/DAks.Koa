@@ -13,7 +13,7 @@ $lazyload-data-key: 'lazyload' !default;
 
   &[data-#{$lazyload-data-key}=error] {
     background-size: contain;
-    background-image: url("~static/images/system/error.svg");
+    background-image: url("~static/images/system/error.svg") !important;
   }
 
   &[data-#{$lazyload-data-key}=loaded] {
@@ -23,7 +23,7 @@ $lazyload-data-key: 'lazyload' !default;
 
   &[data-#{$lazyload-data-key}=reset] {
     background-size: contain;
-    // background-image: url("~static/images/system/image.svg");
+    background-image: url("~static/images/system/image.svg");
   }
 
   &--fluid {

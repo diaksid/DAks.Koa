@@ -8,30 +8,45 @@ block content
 
   #_01.partial
     .container.pt-5
-      canvas.daks(
-      width=192
-      height=192
-      data-light='index'
-      data-href=assets['icon.png']
-      )
-      link(
-      itemprop='image'
-      href='/assets/000.jpg'
-      data-light='index'
-      )
-      link(
-      itemprop='image'
-      href=assets['01.jpg']
-      data-light='index'
-      )
+      canvas.lazyload.mb-3(
+        width=256
+        height=256
+        data-light
+        data-href=assets['icon.png']
+        data-lazy=assets['icon.png']
+        )
+      //-canvas.lazyload.mb-3(
+        width=256
+        height=192
+        data-light='index'
+        data-href=assets['00.jpg']
+        data-lazy=assets['00.jpg']
+        )
+      //-canvas.lazyload.mb-3(
+        width=256
+        height=192
+        data-light='index'
+        data-href=assets['01.jpg']
+        data-lazy=assets['01.jpg']
+        )
+      //-link(
+        itemprop='image'
+        href=assets['00.jpg']
+        data-light='index'
+        )
+      //-link(
+        itemprop='image'
+        href=assets['01.jpg']
+        data-light='index'
+        )
 
   #_02.partial
     .container.pt-5
       .row
         each v, i in Array(21)
           .col-4.mb-4
-            //-p(id=`__${i}`)= i
-            canvas.lazyload.lazyload--fluid(
+            p(id=`__${i}`)= i
+            //-canvas.lazyload.lazyload--fluid(
               id=`__${i}`
               width=600
               height=450

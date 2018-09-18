@@ -58,9 +58,12 @@ $drawer-icon-toggler-bg: str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg
     padding-left: 0;
     color: darken($link-hover-color, 10%);
     border-radius: 0;
-    @include hover-focus {
+    &:focus {
+      color: $cyan;
+    }
+    &:hover:not(.active) {
       color: $white;
-      background-color: lighten($link-hover-color, 10%);
+      background-color: rgba($nav-pills-link-active-bg, .7);
     }
   }
 
