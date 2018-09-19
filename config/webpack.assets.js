@@ -61,6 +61,24 @@ module.exports = (env, argv) => {
         'static': config.path.static
       }
     },
+    /*
+    externals: {
+      jquery: 'jQuery',
+      'popper.js': 'Popper'
+    },
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          vendors: {
+            test: /node_modules/, // new RegExp('node_modules' + '\\' + path.sep + 'jquery.*'),
+            name: 'vendors',
+            chunks: 'initial',
+            enforce: true
+          }
+        }
+      }
+    },
+    */
     devtool: debug && 'source-map',
     module: {
       rules: [
@@ -79,16 +97,6 @@ module.exports = (env, argv) => {
           use: [
             ...cssLoader,
             sassLoader
-          ]
-        },
-        {
-          test: /\.font\.js$/,
-          use: [
-            ...cssLoader,
-            {
-              loader: 'webfonts-loader',
-              options: { publicPath: publicPath }
-            }
           ]
         },
         {
@@ -114,23 +122,23 @@ module.exports = (env, argv) => {
           options: {
             name: '[name].[hash:7].[ext]'
           }
+        },
+        {
+          test: /\.font\.js$/,
+          use: [
+            ...cssLoader,
+            {
+              loader: 'webfonts-loader',
+              options: { publicPath: publicPath }
+            }
+          ]
+        },
+        {
+          test: require.resolve('wowjs'),
+          loader: 'exports-loader?this.WOW'
         }
       ]
     },
-    /*
-    optimization: {
-      splitChunks: {
-        cacheGroups: {
-          vendors: {
-            test: /node_modules/, // new RegExp('node_modules' + '\\' + path.sep + 'jquery.*'),
-            name: 'vendors',
-            chunks: 'initial',
-            enforce: true
-          }
-        }
-      }
-    },
-    */
     plugins: [
       new CleanWebpackPlugin([
         `${config.path.public}/**`

@@ -1,13 +1,14 @@
 import $ from 'jquery'
-import ScrollSign from './pro/scroll_sign'
-import './pro/scroll_to'
-import './pro/lazyload'
-import './pro/lightbox'
+import WOW from 'wowjs'
+import * as PRO from './pro'
 
-(($, ScrollSign) => {
+(($, WOW, PRO) => {
   $.scrollSign()
 
   $(() => {
+    const wow = new WOW({ live: false })
+    wow.init()
+
     $.scrollTo()
 
     const $draver = $('.drawer')
@@ -22,12 +23,13 @@ import './pro/lightbox'
     $draver.find('.dropdown-toggle').click(() => $draver.removeClass('drawer--mini'))
 
     $.lightbox()
-      .on('open', ScrollSign.hide)
-      .on('close', ScrollSign.show)
+    PRO.Lightbox
+      .on('open', PRO.ScrollSign.hide)
+      .on('close', PRO.ScrollSign.show)
 
     $('.modal')
-      .on('show.bs.modal', ScrollSign.hide)
-      .on('hidden.bs.modal', ScrollSign.show)
+      .on('show.bs.modal', PRO.ScrollSign.hide)
+      .on('hidden.bs.modal', PRO.ScrollSign.show)
   })
 
   window.addEventListener('load', () => {
@@ -39,8 +41,4 @@ import './pro/lightbox'
       target: '.drawer'
     })
   })
-  /*
-  window.addEventListener('scroll', () => {
-  })
-  */
-})($, ScrollSign)
+})($, WOW, PRO)

@@ -1,6 +1,4 @@
-import jQuery from 'jquery'
-
-const Util = ((jQuery) => {
+const Util = (() => {
   const Util = {
     toDataKey (string, suffix) {
       if (suffix) {
@@ -33,10 +31,24 @@ const Util = ((jQuery) => {
 
     setDataSet (element, key, value) {
       return (element.dataset[Util.toDataSet(key)] = value)
+    },
+
+    newEvent (name, bubble = false, cancelable = false) {
+      let event
+      if (typeof Event === 'function') {
+        event = new Event(name, {
+          bubble: bubble,
+          cancelable: cancelable
+        })
+      } else {
+        event = document.createEvent('Event')
+        event.initEvent(name, bubble, cancelable)
+      }
+      return event
     }
   }
 
   return Util
-})(jQuery)
+})()
 
 export default Util

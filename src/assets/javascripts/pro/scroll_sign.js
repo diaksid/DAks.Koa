@@ -58,11 +58,11 @@ const ScrollSign = ((jQuery, Util) => {
     }
 
     static show () {
-      return document.dispatchEvent(new Event(Events.SHOW))
+      return document.dispatchEvent(Util.newEvent(Events.SHOW))
     }
 
     static hide () {
-      return document.dispatchEvent(new Event(Events.HIDE))
+      return document.dispatchEvent(Util.newEvent(Events.HIDE))
     }
 
     static get version () {
@@ -87,10 +87,7 @@ const ScrollSign = ((jQuery, Util) => {
     jQuery.fn[NAME] = JQUERY_NO_CONFLICT
     return ScrollSign._jQuery
   }
-  jQuery[NAME] = (...args) => {
-    jQuery(`[data-${Util.toDataKey(DATA_KEY)}]`)[NAME](...args)
-    return ScrollSign
-  }
+  jQuery[NAME] = (...args) => jQuery(`[data-${Util.toDataKey(DATA_KEY)}]`)[NAME](...args)
 
   return ScrollSign
 })(jQuery, Util)

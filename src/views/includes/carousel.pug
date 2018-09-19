@@ -1,9 +1,29 @@
-- n = 4
-.carousel.slide(
+section.carousel.slide(
 data-ride='carousel'
 data-interval='10000'
 data-pause
 )
+  //:uglify-css scoped
+  style.
+    .carousel-item .icon {
+      display: block;
+      color: #777;
+      font-size: 30vmin;
+    }
+    .carousel-item .icon-__logo {
+      color: #555;
+      font-size: 15vmin;
+    }
+    .carousel__more {
+      position: absolute;
+      right: 2rem;
+      bottom: 4rem;
+    }
+    .carousel__more .icon {
+      display: block;
+      font-size: 2rem;
+    }
+  - n = 4
   ol.carousel-indicators
     each v, i in Array(n)
       li(
@@ -17,16 +37,19 @@ data-pause
         //-.lazyload(data-carousel-lazy=`https://picsum.photos/600/450?image=${Math.floor(Math.random() * 49) + 1}`)
         case i
           when 0
-            .p-5: +icon('__logo')(style='display:block;font-size:20vmin')
+            .p-5: +icon('__logo').wow.zoomIn(data-wow-delay='.5s')
           when 1
-            .p-5: +icon('apps')(style='display:block;font-size:35vmin')
+            .p-5: +icon('apps').wow.zoomIn(data-wow-delay='.5s')
           when 2
-            .p-5: +icon('security')(style='display:block;font-size:35vmin')
+            .p-5: +icon('security').wow.zoomIn(data-wow-delay='.5s')
           when 3
-            .p-5: +icon('important_devices')(style='display:block;font-size:35vmin')
+            .p-5: +icon('important_devices').wow.zoomIn(data-wow-delay='.5s')
         .carousel-caption.d-none.d-md-block
           h5 Slide #{i + 1}
           p Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    .carousel__more.wow.zoomIn(data-wow-delay='.5s')
+      each v, i in Array(3)
+        +icon('expand_more').wow.fadeOutDown.infinite(data-wow-delay=`${1.5 + 0.25 * i}s`)
   a.carousel-control-prev(
   role='button'
   href='.carousel'

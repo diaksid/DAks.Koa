@@ -23,7 +23,14 @@ meta(
   content='index,follow'
   )
 
-script (function (w, d) {var t = w.ontouchstart || (w.DocumentTouch && d instanceof DocumentTouch);d.documentElement.classList.add('is-js', (t ? 'is-touch' : 'is-touch--not'))})(window, document)
+//-script (function(w,d){var t=w.ontouchstart||(w.DocumentTouch&&d instanceof DocumentTouch);d.documentElement.className='is-js is-touch'+(t?'':'--not')})(window,document)
+
+script
+  :uglify-js
+    (function (window, document) {
+      var touch = window.ontouchstart || (window.DocumentTouch && document instanceof DocumentTouch);
+      document.documentElement.className = 'is-js is-touch' + (touch ? '' : '--not');
+    })(window, document)
 
 //-href='//fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
 //-link(
@@ -83,3 +90,5 @@ meta(
   name='theme-color'
   content='#ffffff'
   )
+
+//-script (function(d,w,c){(w[c]=w[c]||[]).push(function(){try{w.yaCounter46100703=new Ya.Metrika({id:46100703,clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true,trackHash:true})}catch(e){}});var n=d.getElementsByTagName('script')[0],s=d.createElement('script'),f=function(){n.parentNode.insertBefore(s, n);};s.type='text/javascript';s.async=true;s.src='https://mc.yandex.ru/metrika/watch.js';if(w.opera=='[object Opera]'){d.addEventListener('DOMContentLoaded',f,false)}else{f()}})(document,window,'yandex_metrika_callbacks')

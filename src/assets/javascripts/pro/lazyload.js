@@ -80,11 +80,11 @@ const Lazyload = ((jQuery, Util, window, document) => {
     }
 
     static update () {
-      return document.dispatchEvent(new Event(Events.UPDATE))
+      return document.dispatchEvent(Util.newEvent(Events.UPDATE))
     }
 
     static reset () {
-      return document.dispatchEvent(new Event(Events.RESET))
+      return document.dispatchEvent(Util.newEvent(Events.RESET))
     }
 
     static get version () {
@@ -231,10 +231,7 @@ const Lazyload = ((jQuery, Util, window, document) => {
     jQuery.fn[NAME] = JQUERY_NO_CONFLICT
     return Lazyload._jQuery
   }
-  jQuery[NAME] = (...args) => {
-    jQuery(`[data-${Util.toDataKey(Default.attribute)}]`)[NAME](...args)
-    return Lazyload
-  }
+  jQuery[NAME] = (...args) => jQuery(`[data-${Util.toDataKey(Default.attribute)}]`)[NAME](...args)
 
   return Lazyload
 })(jQuery, Util, window, document)

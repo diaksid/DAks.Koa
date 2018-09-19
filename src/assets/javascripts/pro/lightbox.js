@@ -146,7 +146,7 @@ const Lightbox = ((jQuery, Util, document) => {
       if (!this._overlay) {
         this._events = {}
         for (let event in Events) {
-          this._events[event] = new Event(Events[event])
+          this._events[event] = Util.newEvent(Events[event])
         }
         this._overlay = jQuery('<div>')
           .addClass(`${this._dataKey}-overlay`)
@@ -254,10 +254,7 @@ const Lightbox = ((jQuery, Util, document) => {
     jQuery.fn[NAME] = JQUERY_NO_CONFLICT
     return Lightbox._jQuery
   }
-  jQuery[NAME] = (...args) => {
-    jQuery(`[data-${Util.toDataKey(Default.attribute)}]`)[NAME](...args)
-    return Lightbox
-  }
+  jQuery[NAME] = (...args) => jQuery(`[data-${Util.toDataKey(Default.attribute)}]`)[NAME](...args)
 
   return Lightbox
 })(jQuery, Util, document)

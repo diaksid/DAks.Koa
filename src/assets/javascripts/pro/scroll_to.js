@@ -95,10 +95,7 @@ const ScrollTo = ((jQuery, Util) => {
     jQuery.fn[NAME] = JQUERY_NO_CONFLICT
     return ScrollTo._jQuery
   }
-  jQuery[NAME] = (...args) => {
-    jQuery(`[data-${Util.toDataKey(DATA_KEY)}]`)[NAME](...args)
-    return ScrollTo
-  }
+  jQuery[NAME] = (...args) => jQuery(`[data-${Util.toDataKey(DATA_KEY)}]`)[NAME](...args)
 
   return ScrollTo
 })(jQuery, Util)
