@@ -8,18 +8,18 @@ html(
   itemtype='http://schema.org/WebPage'
   )
   head
-    include includes/head
+    include components/head
 
   body
-    include includes/carousel
+    include components/carousel
     //-include includes/header
 
     main(role='main'): block content
 
-    include includes/footer
-    include includes/drawer
-    include includes/scroll_sign
-    include includes/mail
+    include components/footer
+    include components/drawer
+    include components/scroll_sign
+    include components/mail
 
     //-script(
       src='https://code.jquery.com/jquery-3.3.1.slim.min.js'
