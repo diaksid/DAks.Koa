@@ -3,21 +3,21 @@ aside.drawer.drawer--mini
     .drawer__toggle: +icon('menu').drawer__icon
 
     a.btn.btn-link.nav-link(
-    href='#_00'
+    href='.partial--00'
     data-scroll-to
     )
       +icon('apps').drawer__icon
       span Home
 
     a.btn.btn-link.nav-link(
-    href='#_01'
+    href='.partial--01'
     data-scroll-to
     )
       +icon('security').drawer__icon
       span About
 
     a.btn.btn-link.nav-link(
-    href='#_02'
+    href='.partial--02'
     data-scroll-to
     )
       +icon('important_devices').drawer__icon
@@ -25,13 +25,13 @@ aside.drawer.drawer--mini
 
     .btn.btn-link.nav-link.dropdown-toggle(
     data-toggle='collapse'
-    data-target='#pageSubmenu'
+    data-target='.drawer__page-submenu'
     aria-expanded='false'
     class='dropdown-toggle'
     )
       +icon('import_contacts').drawer__icon
       span Pages
-    #pageSubmenu.collapse
+    .drawer__page-submenu.collapse
       .btn.btn-link.dropdown-item Page 1
       .btn.btn-link.dropdown-item Page 2
       .btn.btn-link.dropdown-item Page 3
