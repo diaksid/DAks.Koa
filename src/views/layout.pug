@@ -12,14 +12,17 @@ html(
 
   body
     include components/carousel
-    //-include includes/header
 
-    main(role='main'): block content
+    main(
+    role='main'
+    itemprop='mainContentOfPage'
+    ): block content
 
-    include components/footer
+    include components/header
     include components/drawer
-    include components/scroll_sign
+    include components/footer
     include components/mail
+    include components/scroll_sign
 
     //-script(
       src='https://code.jquery.com/jquery-3.3.1.slim.min.js'

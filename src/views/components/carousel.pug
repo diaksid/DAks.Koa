@@ -3,17 +3,17 @@ data-ride='carousel'
 data-interval='10000'
 data-pause
 )
-  //:uglify-css scoped
-  style.
-    .carousel-item .icon {
-      display: block;
-      color: #777;
-      font-size: 30vmin;
-    }
-    .carousel-item .icon-__logo {
-      color: #555;
-      font-size: 15vmin;
-    }
+  :uglify-css
+    style.
+      .carousel-item .icon {
+        display: block;
+        color: #777;
+        font-size: 30vmin;
+      }
+      .carousel-item .icon-__logo {
+        color: #555;
+        font-size: 15vmin;
+      }
   - n = 4
   ol.carousel-indicators
     each v, i in Array(n)
