@@ -38,7 +38,8 @@ import * as PRO from './pro'
       attribute: 'carousel-lazy'
     })
     $(document.body).scrollspy({
-      target: '.drawer'
+      target: '.drawer',
+      offset: 200
     })
   })
 })($, WOW, PRO)

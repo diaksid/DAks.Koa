@@ -1,4 +1,5 @@
 const path = require('path')
+const glob = require('glob')
 const merge = require('webpack-merge')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
@@ -35,7 +36,7 @@ module.exports = (env, argv) => {
       sourceMap: debug,
       includePaths: [
         config.path.assets,
-        path.resolve(config.path.app, 'node_modules')
+        path.join(config.path.app, 'node_modules')
       ]
     }
   }
@@ -45,7 +46,12 @@ module.exports = (env, argv) => {
   return merge(common, {
     target: 'web',
     entry: {
-      app: './src/assets'
+      app: [
+        `./${config.dir.src}/${config.dir.assets}/javascripts`,
+        `./${config.dir.src}/${config.dir.assets}/stylesheets`,
+        `./${config.dir.src}/${config.dir.assets}/fonts/iconfont/.font`
+      ],
+      images: glob.sync(`./${config.dir.src}/${config.dir.assets}/images/**`, { nodir: true })
     },
     output: {
       path: path.join(config.path.public, config.dir.assets),
@@ -101,10 +107,21 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|eot|ttf)$/,
-          exclude: [path.join(config.path.assets, 'sprite')],
+          exclude: [
+            path.join(config.path.assets, 'images'),
+            path.join(config.path.assets, 'sprite')
+          ],
           loader: 'url-loader',
           options: {
             limit: 8192,
+            name: '[name].[hash:7].[ext]'
+          }
+        },
+        {
+          test: /\.(png|jpg|jpeg|gif|svg)$/,
+          include: [path.join(config.path.assets, 'images')],
+          loader: 'file-loader',
+          options: {
             name: '[name].[hash:7].[ext]'
           }
         },
@@ -158,7 +175,7 @@ module.exports = (env, argv) => {
       new WebpackManifestPlugin({
         fileName: path.join(config.path.build, 'assets.json'),
         publicPath: publicPath,
-        filter: file => file.isChunk || file.isModuleAsset
+        filter: file => (file.isChunk || file.isModuleAsset) && !/\.font\.js$/.test(file.name)
       })
     ]
   })
