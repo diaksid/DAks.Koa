@@ -14,7 +14,7 @@ const publicPath = `/${config.dir.assets}/`
 process.env.BABEL_ENV = 'assets'
 
 module.exports = (env, argv) => {
-  process.env.NODE_ENV = env || argv.mode
+  process.env.NODE_ENV = env || argv.mode || 'development'
   const debug = process.env.NODE_ENV !== 'production'
 
   const cssLoader = [

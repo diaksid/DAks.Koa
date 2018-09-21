@@ -5,25 +5,44 @@ aria-labelledby='modal-mail-label'
 aria-hidden='true'
 )
   .modal-dialog(role='document')
-    .modal-content
+    form.modal-mail__form.modal-content(novalidate)
       .modal-header
-        h5#modal-mail-label.modal-title New message
+        h5#modal-mail-label.modal-title Отправить сообщение
         button.close(
         type='button'
         data-dismiss='modal'
         aria-label='Close'
         ): span(aria-hidden='true') &times;
       .modal-body
-        form
-          .form-group
-            label.col-form-label(for='recipient-name') Recipient:
-            input#recipient-name.form-control(type='text')
-          .form-group
-            label.col-form-label(for='recipient-text') Message:
-            textarea#recipient-text.form-control
+        .form-group.pt-2
+          label.col-form-label.sr-only(for='modal-mail__email') Электронный адрес:
+          input#modal-mail__email.form-control(
+          type='email'
+          placeholder='Электронный адрес'
+          name='email'
+          )
+          small.form-text.text-muted.text-right корректный электронный адрес
+        .form-group
+          label.col-form-label.sr-only(for='modal-mail__message') Сообщение:
+          textarea#modal-mail__message.form-control(
+          rows=4
+          placeholder='Сообщение'
+          name='message'
+          )
+          small.form-text.text-muted.text-right от 3 до 256 символов
+        .form-group.form-check
+          input#modal-mail__check.form-check-input(
+          type='checkbox'
+          name='check'
+          )
+          label.form-check-label(for='modal-mail__check') Согласие
+          small.form-text.text-muted на предоставление персональных данных
       .modal-footer
         button.btn.btn-secondary(
         type='button'
         data-dismiss='modal'
-        ) Close
-        button.btn.btn-primary(type='button') Send message
+        ) Закрыть
+        button.btn.btn-primary(
+        type='submit'
+        name='submit'
+        ) Отправить

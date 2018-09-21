@@ -8,7 +8,7 @@ module.exports = (env, argv) => {
   const debug = process.env.DEBUG = env !== 'production'
 
   return {
-    mode: argv.mode,
+    mode: argv.mode || 'development',
     context: config.path.app,
     output: {
       filename: '[name].bundle.[contenthash:7].js',

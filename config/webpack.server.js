@@ -6,7 +6,7 @@ const config = require('config')
 process.env.BABEL_ENV = 'server'
 
 module.exports = (env, argv) => {
-  process.env.NODE_ENV = env || argv.mode
+  process.env.NODE_ENV = env || argv.mode || 'development'
 
   const common = require('./webpack.common.js')(process.env.NODE_ENV, argv)
 
