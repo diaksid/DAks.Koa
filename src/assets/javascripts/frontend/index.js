@@ -24,13 +24,6 @@ import Mailer from './mailer'
     $draver.find('.dropdown-toggle').click(() => $draver.removeClass('drawer--mini'))
 
     $.lightbox()
-    PRO.Lightbox
-      .on('open', PRO.ScrollSign.hide)
-      .on('close', PRO.ScrollSign.show)
-
-    $('.modal')
-      .on('show.bs.modal', PRO.ScrollSign.hide)
-      .on('hidden.bs.modal', PRO.ScrollSign.show)
 
     const mailer = new Mailer('.modal-mail__form')
     mailer.init(true)

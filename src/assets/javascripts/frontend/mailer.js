@@ -15,22 +15,46 @@ class Mailer {
     this._check = this._form.check
     this._check.addEventListener('change', this._validate.bind(this))
     this._checked()
+    this._flash = document.querySelector('.flash__alert')
   }
 
   init (test = false) {
-    this._form.addEventListener('submit', (event) => {
+    this._submit.addEventListener('click', (event) => {
       if (this._validate(true)) {
         if (test) {
           alert(this._email.value)
         } else {
+          this._submit.disabled = true
+          this._flash.className = this._flash.className.replace(/\s+alert-(success|danger)/, '')
           $.ajax(this._action, {
-            email: this._email.value,
-            message: this._message.value
+            method: 'POST',
+            cache: false,
+            data: {
+              email: this._email.value,
+              message: this._message.value
+            },
+            timeout: 5000,
+            success: data => {
+              data = JSON.parse(data)
+              if (data.status === 200) {
+                this._flash.innerHTML = 'Сообщение отправлено!'
+                this._flash.className += ' alert-success show'
+              } else {
+                this._flash.innerHTML = data.message
+                this._flash.className += ' alert-danger show'
+              }
+            },
+            error: err => {
+              this._flash.innerHTML = `Ошибка AJAX! [ ${err} ]`
+              this._flash.className += 'alert-danger show'
+            },
+            complete: () => setTimeout(() => {
+              this._submit.disabled = false
+              this._flash.classList.remove('show')
+            }, this._flash.dataset.timeout || 5000)
           })
         }
       }
-      event.preventDefault()
-      return false
     })
     return this
   }
@@ -59,6 +83,10 @@ class Mailer {
     this._check.className += ` is-${this._check.checked ? '' : 'in'}valid`
     // this._submit.disabled = !valid
     return valid
+  }
+
+  _submit () {
+
   }
 }
 
