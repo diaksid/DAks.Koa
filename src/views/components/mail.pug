@@ -5,7 +5,15 @@ aria-labelledby='modal-mail-label'
 aria-hidden='true'
 )
   .modal-dialog(role='document')
-    form.modal-mail__form.modal-content(novalidate)
+    form.modal-mail__form.modal-content(
+    action='mail'
+    novalidate
+    )
+      input(
+      type='hidden'
+      value=CSRF
+      name='csrf'
+      )
       .modal-header
         h5#modal-mail-label.modal-title Отправить сообщение
         button.close(
@@ -19,6 +27,7 @@ aria-hidden='true'
           input#modal-mail__email.form-control(
           type='email'
           placeholder='Электронный адрес'
+          value='aaa@bbb.ccc'
           name='email'
           )
           small.form-text.text-muted.text-right корректный электронный адрес
@@ -28,11 +37,12 @@ aria-hidden='true'
           rows=4
           placeholder='Сообщение'
           name='message'
-          )
+          ) 1234567
           small.form-text.text-muted.text-right от 3 до 256 символов
         .form-group.form-check
           input#modal-mail__check.form-check-input(
           type='checkbox'
+          checked
           name='check'
           )
           label.form-check-label(for='modal-mail__check') Согласие
@@ -43,6 +53,6 @@ aria-hidden='true'
         data-dismiss='modal'
         ) Закрыть
         button.btn.btn-primary(
-        type='submit'
+        type='button'
         name='submit'
         ) Отправить

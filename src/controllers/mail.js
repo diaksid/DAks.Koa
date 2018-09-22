@@ -31,9 +31,6 @@ module.exports = {
 
   deliver: async (ctx) => {
     const body = ctx.request.body
-    if (body.csrf !== ctx.csrf) {
-      ctx.throw(401, 'CSRF controll')
-    }
     const mail = {
       to: config.get('mailer.to').split(/\s+/),
       from: `"${body.email}" <${sender}>`,
@@ -43,27 +40,40 @@ module.exports = {
       html: body.message,
       text: body.message
     }
-    const options = {
-      method: 'POST',
-      uri: 'https://www.google.com/recaptcha/api/siteverify',
-      json: true,
-      form: {
-        secret: config.get('recaptcha.secret'),
-        response: body.recaptcha
-      }
-    }
-
-    await rp(options)
-      .then(async body => {
-        if (body.success) {
-          await transporter.sendMail(mail)
-            .then(mes => {
-              ctx.body = { message: 'Сообщение отправлено' }
-              process.env.DEBUG && console.info(mes.envelope)
-            })
-        } else {
-          ctx.throw(401, body['error-codes'].join('.'))
+    if (body.hasOwnProperty('recaptcha')) {
+      const options = {
+        method: 'POST',
+        uri: 'https://www.google.com/recaptcha/api/siteverify',
+        json: true,
+        form: {
+          secret: config.get('recaptcha.secret'),
+          response: body.recaptcha
         }
-      })
+      }
+      await rp(options)
+        .then(async body => {
+          if (body.success) {
+            await transporter.sendMail(mail)
+              .then(mes => {
+                ctx.body = {
+                  status: 200,
+                  message: 'Сообщение отправлено'
+                }
+                process.env.DEBUG && console.info(mes.envelope)
+              })
+          } else {
+            ctx.throw(401, body['error-codes'].join('.'))
+          }
+        })
+    } else {
+      await transporter.sendMail(mail)
+        .then(mes => {
+          ctx.body = {
+            status: 200,
+            message: 'Сообщение отправлено'
+          }
+          process.env.DEBUG && console.info(mes.envelope)
+        })
+    }
   }
 }

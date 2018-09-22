@@ -5,4 +5,4 @@ const router = new Router()
 
 module.exports = router
   .get('/', controller.test)
-  .put('/', controller.deliver)
+  .post('/', controller.deliver)

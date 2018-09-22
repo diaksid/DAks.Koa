@@ -26,7 +26,7 @@ import Mailer from './mailer'
     $.lightbox()
 
     const mailer = new Mailer('.modal-mail__form')
-    mailer.init(true)
+    mailer.init()
   })
 
   window.addEventListener('load', () => {
