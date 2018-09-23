@@ -1,2 +1,10 @@
 header.header
-  a.header__phone(href='tel://+77777777777') +7(777) 777-77-77
+  .btn.btn-link(
+  data-toggle="modal"
+  data-target=".modal-mail"
+  ): +icon('mail_outline')
+
+  a.btn.btn-link(href='tel://+77777777777')
+    small +7(777)
+    |
+    | 777-77-77
