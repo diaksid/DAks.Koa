@@ -12,8 +12,9 @@ $lightbox-data-key: 'lightbox' !default;
     right: 0;
     bottom: 0;
     left: 0;
-    background: center no-repeat rgba(0, 0, 0, .5);
+    background: center no-repeat rgba(0, 0, 0, 0.5);
     cursor: pointer;
+
     &--load {
       background-size: 10%;
       background-image: url("~static/images/loading/0.svg");
@@ -25,10 +26,11 @@ $lightbox-data-key: 'lightbox' !default;
     position: relative;
     padding: 4px;
     max-width: 80vw;
-    background-color: #ffffff;
+    background-color: #fff;
     border-radius: 4px;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, .7);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7);
     cursor: default;
+
     &--html {
       top: -20%;
     }
@@ -38,17 +40,18 @@ $lightbox-data-key: 'lightbox' !default;
   &-prev,
   &-close {
     position: absolute;
-    color: #ffffff;
+    color: #fff;
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
     font-size: 40px;
     line-height: 40px;
-    text-shadow: 0 0 8px rgba(50, 50, 50, .8);
+    text-shadow: 0 0 8px rgba(50, 50, 50, 0.8);
     cursor: pointer;
     transition: all 250ms;
+
     &:hover {
       font-weight: bold;
-      text-shadow: 0 4px 12px rgba(0, 0, 0, .8);
-      opacity: .9;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+      opacity: 0.9;
     }
   }
 
@@ -57,8 +60,9 @@ $lightbox-data-key: 'lightbox' !default;
     top: 0;
     width: calc(50% + 40px);
     height: 100%;
-    opacity: .5;
-    &:before {
+    opacity: 0.5;
+
+    &::before {
       position: absolute;
       top: 50%;
       margin-top: -20px;
@@ -67,7 +71,8 @@ $lightbox-data-key: 'lightbox' !default;
 
   &-next {
     right: -40px;
-    &:before {
+
+    &::before {
       content: '❭';
       right: 15px;
     }
@@ -75,19 +80,21 @@ $lightbox-data-key: 'lightbox' !default;
 
   &-prev {
     left: -40px;
-    &:before {
+
+    &::before {
       content: '❬';
       left: 15px;
     }
   }
 
   &-close {
-    top: -22px;
-    right: -20px;
+    top: -20px;
+    right: -24px;
     width: 40px;
     height: 40px;
-    opacity: .7;
-    &:before {
+    opacity: 0.7;
+
+    &::before {
       content: '✗';
     }
   }
