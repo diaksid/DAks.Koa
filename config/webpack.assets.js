@@ -13,6 +13,10 @@ const publicPath = `/${config.dir.assets}/`
 
 process.env.BABEL_ENV = 'assets'
 
+// require('@babel/register')({
+//   ignore: [/node_modules(?!\/@material\/.+)/]
+// })
+
 module.exports = (env, argv) => {
   process.env.NODE_ENV = env || argv.mode || 'development'
   const debug = process.env.NODE_ENV !== 'production'
@@ -51,7 +55,8 @@ module.exports = (env, argv) => {
         `./${config.dir.src}/${config.dir.assets}/stylesheets`,
         `./${config.dir.src}/${config.dir.assets}/fonts/iconfont/.font`
       ],
-      images: glob.sync(`./${config.dir.src}/${config.dir.assets}/images/**`, { nodir: true })
+      images: glob.sync(`./${config.dir.src}/${config.dir.assets}/images/**`, { nodir: true }),
+      polyfill: `./${config.dir.src}/${config.dir.assets}/javascripts/polyfill.js`
     },
     output: {
       path: path.join(config.path.public, config.dir.assets),
@@ -60,6 +65,7 @@ module.exports = (env, argv) => {
     resolve: {
       extensions: ['.js', '.json', '.css', '.scss'],
       alias: {
+        '@pro': path.join(config.path.assets, '@pro'),
         'assets': config.path.assets,
         'images': path.join(config.path.assets, 'images'),
         'stylesheets': path.join(config.path.assets, 'stylesheets'),
@@ -90,9 +96,27 @@ module.exports = (env, argv) => {
       rules: [
         {
           test: /\.(js|es6)$/,
-          include: [config.path.assets],
-          exclude: [/node_modules/],
-          loader: 'babel-loader'
+          include: [
+            config.path.assets,
+            path.join(config.path.app, 'node_modules', '@material')
+          ],
+          use: [{
+            loader: 'babel-loader',
+            options: {
+              babelrc: false,
+              presets: [
+                ['@babel/preset-env', {
+                  modules: false,
+                  targets: {
+                    ie: 11,
+                    browsers: '> 1%'
+                  },
+                  forceAllTransforms: true,
+                  useBuiltIns: false
+                }]
+              ]
+            }
+          }]
         },
         {
           test: /\.css$/,
@@ -168,7 +192,7 @@ module.exports = (env, argv) => {
       ], {}),
       new SpriteLoaderPlugin({}),
       new MiniCssExtractPlugin({
-        filename: '[name].bundle.[contenthash:7].css',
+        filename: '[name].[contenthash:7].css',
         chunkFilename: '[name].[contenthash:7].css'
       }),
       new MediaQueryPlugin({}),

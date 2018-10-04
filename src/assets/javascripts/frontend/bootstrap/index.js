@@ -1,9 +1,10 @@
 import $ from 'jquery'
 import WOW from 'wowjs'
-import * as PRO from '../pro/index'
+import * as PRO from 'javascripts/pro/jquery'
 import Mailer from './mailer'
 
-(($, WOW, PRO) => {
+
+(function ($, WOW, PRO) {
   $.scrollSign()
 
   $(() => {
@@ -39,4 +40,4 @@ import Mailer from './mailer'
       offset: 200
     })
   })
-})($, WOW, PRO)
+}).call(this, $, WOW, PRO)

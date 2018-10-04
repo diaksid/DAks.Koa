@@ -21,8 +21,6 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   },
   globals: {
-    $: true,
-    jQuery: true,
-    WOW: true
+    ymaps: true
   }
 }

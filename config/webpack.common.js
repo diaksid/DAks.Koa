@@ -11,8 +11,8 @@ module.exports = (env, argv) => {
     mode: argv.mode || 'development',
     context: config.path.app,
     output: {
-      filename: '[name].bundle.[contenthash:7].js',
-      chunkFilename: '[name].[contenthash:7].bundle.js'
+      filename: '[name].[contenthash:7].js',
+      chunkFilename: '[name].[contenthash:7].js'
     },
     resolve: {
       modules: [
