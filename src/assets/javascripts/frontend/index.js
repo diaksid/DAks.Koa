@@ -1,5 +1,5 @@
 // import * as MDC from 'javascripts/mdc-web'
-import PRO from '@pro/pro'
+import { PRO } from '@pro'
 
 window.PRO = PRO
 

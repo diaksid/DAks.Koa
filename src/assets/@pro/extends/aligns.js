@@ -1,19 +1,13 @@
 import { Pro } from '../pro'
-import '../helpers/properties'
+import PROaligns from '../components/aligns'
 
-function PROaligns (selector, context) {
-  let val = 0
-  return new Pro(selector, context)
-    .each(function () {
-      this.style.height = ''
-      const height = new Pro(this).innerHeight()
-      if (height > val) {
-        val = height
-      }
+Pro.prototype.aligns = function (selector) {
+  if (selector) {
+    this.each(function () {
+      PROaligns(selector, this)
     })
-    .each(function () {
-      this.style.height = `${val}px`
-    })
+  } else {
+    PROaligns(this)
+  }
+  return this
 }
-
-export default PROaligns

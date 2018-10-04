@@ -1,6 +1,6 @@
 import { Pro } from '../pro'
-import PROdata from '../extends/dataset'
-import '../helpers/html'
+import '../extends/html'
+import PROdata from '../helpers/dataset'
 
 const NAME = 'lightbox'
 const VERSION = '0.0.1'

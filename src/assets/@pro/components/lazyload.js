@@ -1,7 +1,7 @@
 import { Pro } from '../pro'
-import PROisObject from '../extends/is_object'
-import PROdata from '../extends/dataset'
-import '../helpers/properties'
+import '../extends/properties'
+import PROisObject from '../helpers/is_object'
+import PROdata from '../helpers/dataset'
 
 const NAME = 'lazyload'
 const VERSION = '0.0.1'

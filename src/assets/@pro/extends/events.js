@@ -1,47 +1,68 @@
-function PROnewEvent (name, bubble = false, cancelable = false) {
-  let event
-  if (typeof Event === 'function') {
-    event = new Event(name, {
-      bubble: bubble,
-      cancelable: cancelable
+import { Pro } from '../pro'
+
+Pro.assign({
+  on (element, type, callback) {
+    if (typeof element === 'string') {
+      callback = type
+      type = element
+      element = document
+    }
+    if (element instanceof Array) {
+      for (let item of element) {
+        this.on(item, type, callback)
+      }
+    } else {
+      element.addEventListener(type, callback)
+    }
+    return this
+  },
+
+  off (element, type, callback) {
+    if (typeof element === 'string') {
+      callback = type
+      type = element
+      element = document
+    }
+    if (element instanceof Array) {
+      for (let item of element) {
+        this.off(item, type, callback)
+      }
+    } else {
+      element.removeEventListener(type, callback)
+    }
+    return this
+  },
+
+  onclick (element, callback) {
+    if (typeof callback === 'string') {
+      let url = callback
+      if (/\/\//.test(url)) {
+        callback = () => window.open(url, '_blank')
+      } else {
+        callback = () => location.assign(url)
+      }
+    }
+    element.addEventListener('click', callback)
+    return this
+  }
+})
+
+Pro.assign({
+  on (type, callback) {
+    return this.each(function () {
+      this.addEventListener(type, callback)
     })
-  } else {
-    event = document.createEvent('Event')
-    event.initEvent(name, bubble, cancelable)
-  }
-  return event
-}
+  },
 
-function PROonReady (element, callback) {
-  if (typeof element === 'function') {
-    callback = element
-    element = document
-  }
-  return element.addEventListener('DOMContentLoaded', callback)
-}
+  off (type, callback) {
+    return this.each(function () {
+      this.removeEventListener(type, callback)
+    })
+  },
 
-function PROonLoad (element, callback) {
-  if (typeof element === 'function') {
-    callback = element
-    element = window
+  onclick (callback) {
+    return this.each(function () {
+      Pro.onclick(this, callback)
+    })
   }
-  return element.addEventListener('load', callback)
-}
-
-function PROonResize (element, callback) {
-  if (typeof element === 'function') {
-    callback = element
-    element = window
-  }
-  return element.addEventListener('resize', callback)
-}
-
-function PROonScroll (element, callback) {
-  if (typeof element === 'function') {
-    callback = element
-    element = window
-  }
-  return element.addEventListener('scroll', callback)
-}
-
-export { PROnewEvent, PROonReady, PROonLoad, PROonResize, PROonScroll }
+}, true)

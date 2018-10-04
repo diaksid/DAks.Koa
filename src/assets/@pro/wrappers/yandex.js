@@ -1,6 +1,6 @@
 import { Pro } from '../pro'
-import PROisObject from '../extends/is_object'
-import '../extends/assets'
+import PROisObject from '../helpers/is_object'
+import '../helpers/assets'
 
 const Default = {
   selector: '.c-ymap',
