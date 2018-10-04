@@ -1,10 +1,8 @@
 // import * as MDC from 'javascripts/mdc-web'
-import PRO from '@pro/es6'
-import { PROstylesheet, PROscript } from '@pro/es6/extends/assets'
+import PRO from '@pro/pro'
 
 window.PRO = PRO
-window.PROstylesheet = PROstylesheet
-window.PROscript = PROscript
+
 /*
 let turbo = !!window.Turbolinks
 

@@ -85,6 +85,10 @@ class Pro {
     return obj
   }
 
+  static to (data) {
+    return data instanceof Pro ? data : new Pro(data)
+  }
+
   static console (type, message) {
     if (this._debug) {
       if (message === null) {

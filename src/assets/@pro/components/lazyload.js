@@ -1,5 +1,6 @@
 import { Pro } from '../pro'
-import '../extends/dataset'
+import PROisObject from '../extends/is_object'
+import PROdata from '../extends/dataset'
 import '../helpers/properties'
 
 const NAME = 'lazyload'
@@ -28,10 +29,10 @@ const Default = {
 
 class Lazyload {
   constructor (scope, event, options) {
-    if (Pro.isObject(scope)) {
+    if (PROisObject(scope)) {
       options = scope
       scope = null
-    } else if (Pro.isObject(event)) {
+    } else if (PROisObject(event)) {
       options = event
       event = null
     }
@@ -52,7 +53,7 @@ class Lazyload {
   }
 
   _load (element) {
-    if (!Pro.getDataSet(element, DATA_KEY)) {
+    if (!PROdata.getSet(element, DATA_KEY)) {
       const item = new Lazy(element, this._options)
       item._appear()
       this._items.push(item)
@@ -126,7 +127,7 @@ class Lazy {
   }
 
   _loader () {
-    const path = Pro.getDataSet(this._element, this._options.attribute)
+    const path = PROdata.getSet(this._element, this._options.attribute)
     this._dataKey = 'loading'
     if (this._options.mask) {
       if (this._element.tagName === 'IMG') {
@@ -205,7 +206,7 @@ class Lazy {
   }
 
   get _dataKey () {
-    return Pro.getDataSet(this._element, DATA_KEY)
+    return PROdata.getSet(this._element, DATA_KEY)
   }
 
   set _dataKey (value) {
@@ -221,6 +222,6 @@ Pro.prototype[NAME] = function () {
 }
 
 Pro[NAME] = function () {
-  new Pro(`[data-${Pro.toDataKey(Default.attribute)}]`)[NAME](...arguments)
+  new Pro(`[data-${PROdata.toKey(Default.attribute)}]`)[NAME](...arguments)
   return this
 }

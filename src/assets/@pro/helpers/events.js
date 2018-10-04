@@ -1,39 +1,39 @@
 import { Pro } from '../pro'
 
 Pro.assign({
-  on (param, type, callback) {
-    if (typeof param === 'string') {
+  on (element, type, callback) {
+    if (typeof element === 'string') {
       callback = type
-      type = param
-      param = document
+      type = element
+      element = document
     }
-    if (param instanceof Array) {
-      for (let item of param) {
+    if (element instanceof Array) {
+      for (let item of element) {
         this.on(item, type, callback)
       }
     } else {
-      param.addEventListener(type, callback)
+      element.addEventListener(type, callback)
     }
     return this
   },
 
-  off (param, type, callback) {
-    if (typeof param === 'string') {
+  off (element, type, callback) {
+    if (typeof element === 'string') {
       callback = type
-      type = param
-      param = document
+      type = element
+      element = document
     }
-    if (param instanceof Array) {
-      for (let item of param) {
+    if (element instanceof Array) {
+      for (let item of element) {
         this.off(item, type, callback)
       }
     } else {
-      param.removeEventEventListener(type, callback)
+      element.removeEventListener(type, callback)
     }
     return this
   },
 
-  onclick (param, callback) {
+  onclick (element, callback) {
     if (typeof callback === 'string') {
       let url = callback
       if (/\/\//.test(url)) {
@@ -42,7 +42,7 @@ Pro.assign({
         callback = () => location.assign(url)
       }
     }
-    param.addEventListener('click', callback)
+    element.addEventListener('click', callback)
     return this
   }
 })

@@ -1,19 +1,19 @@
-const PROdata = {
-  toKey (str, suffix) {
+class PROdata {
+  static toKey (str, suffix) {
     if (suffix) {
       str += '.' + suffix
     }
     return str.toLowerCase().replace(/[._\s]+(.)?/g, (match, chr) => chr ? '-' + chr : '')
-  },
+  }
 
-  toSet (str, suffix) {
+  static toSet (str, suffix) {
     if (suffix) {
       str += '.' + suffix
     }
     return str.toLowerCase().replace(/[._\-\s]+(.)?/g, (match, chr) => chr ? chr.toUpperCase() : '')
-  },
+  }
 
-  getSet (element, key, ...args) {
+  static getSet (element, key, ...args) {
     if (args.length) {
       const data = {}
       args.forEach((arg) => {
@@ -26,9 +26,9 @@ const PROdata = {
     } else {
       return element.dataset[this.toSet(key)]
     }
-  },
+  }
 
-  setSet (element, key, value) {
+  static setSet (element, key, value) {
     return (element.dataset[this.toSet(key)] = value)
   }
 }

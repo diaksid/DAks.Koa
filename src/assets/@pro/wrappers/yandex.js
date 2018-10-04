@@ -1,4 +1,5 @@
 import { Pro } from '../pro'
+import PROisObject from '../extends/is_object'
 import '../extends/assets'
 
 const Default = {
@@ -76,7 +77,7 @@ class Ymaps {
 }
 
 function PROymaps (selector, options) {
-  if (Pro.isObject(selector)) {
+  if (PROisObject(selector)) {
     options = selector
     selector = null
   }

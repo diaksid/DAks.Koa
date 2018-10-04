@@ -1,5 +1,5 @@
 import { Pro } from '../pro'
-import '../extends/dataset'
+import PROdata from '../extends/dataset'
 import '../helpers/html'
 
 const NAME = 'lightbox'
@@ -35,11 +35,11 @@ class Lightbox {
   }
 
   _load (element) {
-    if (!Pro.getDataSet(element, DATA_KEY)) {
+    if (!PROdata.getSet(element, DATA_KEY)) {
       const path = element.dataset[Pro.toDataSet(this._options.attribute, 'href')] || element.dataset.href ||
         element.getAttribute('href') || element.getAttribute('src')
       if (path) {
-        const group = (path[0] === '#') ? 'html' : Pro.getDataSet(element, this._options.attribute)
+        const group = (path[0] === '#') ? 'html' : PROdata.getSet(element, this._options.attribute)
         if (group && group !== 'html') {
           if (!this._stack[group]) {
             this._stack[group] = []
@@ -257,6 +257,6 @@ Pro.prototype[NAME] = function () {
 }
 
 Pro[NAME] = function () {
-  new Pro(`[data-${Pro.toDataKey(Default.attribute)}]`)[NAME](...arguments)
+  new Pro(`[data-${PROdata.toKey(Default.attribute)}]`)[NAME](...arguments)
   return this
 }
