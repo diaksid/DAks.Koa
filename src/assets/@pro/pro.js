@@ -75,6 +75,13 @@ class Pro {
       for (let key in data) {
         if (data.hasOwnProperty(key)) {
           obj[key] = data[key]
+          /*
+          if (typeof data[key] === 'object' && obj.hasOwnProperty(key)) {
+            obj[key] = this.assign(obj[key], data[key])
+          } else {
+            obj[key] = data[key]
+          }
+          */
         }
       }
     }
@@ -83,6 +90,16 @@ class Pro {
 
   static to (data) {
     return data instanceof Pro ? data : new Pro(data)
+  }
+
+  static isObject (obj) {
+    return typeof obj === 'object' &&
+      (!obj.constructor || obj.constructor === Object) &&
+      Object.prototype.toString.call(obj) === '[object Object]'
+  }
+
+  static count (data) {
+    return data.length !== null ? data.length : [].slice.call(data).length
   }
 
   static console (type, message) {

@@ -1,6 +1,5 @@
 import { Pro } from '../pro'
 import '../extends/properties'
-import PROisObject from '../helpers/is_object'
 import PROdata from '../helpers/dataset'
 
 const NAME = 'lazyload'
@@ -29,10 +28,10 @@ const Default = {
 
 class Lazyload {
   constructor (scope, event, options) {
-    if (PROisObject(scope)) {
+    if (Pro.isObject(scope)) {
       options = scope
       scope = null
-    } else if (PROisObject(event)) {
+    } else if (Pro.isObject(event)) {
       options = event
       event = null
     }
