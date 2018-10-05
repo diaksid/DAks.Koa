@@ -74,11 +74,7 @@ class Pro {
       }
       for (let key in data) {
         if (data.hasOwnProperty(key)) {
-          if (typeof data[key] === 'object' && obj.hasOwnProperty(key)) {
-            obj[key] = this.assign(obj[key], data[key])
-          } else {
-            obj[key] = data[key]
-          }
+          obj[key] = data[key]
         }
       }
     }

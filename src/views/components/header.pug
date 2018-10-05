@@ -1,0 +1,19 @@
+header.app-header.mdc-top-app-bar.h-mimic-scrollbar
+  .mdc-top-app-bar__row
+    section.mdc-top-app-bar__section.mdc-top-app-bar__section--align-start
+      +icon('menu').mdc-top-app-bar__navigation-icon
+      span.mdc-top-app-bar__title Persistent Drawer
+    section.mdc-top-app-bar__section.mdc-top-app-bar__section--align-end(role='toolbar')
+      +icon('mail_outline').mdc-top-app-bar__action-item.is-active(
+      href='#'
+      aria-label='Mail'
+      )
+      +icon('person_outline').mdc-top-app-bar__action-item(
+      href='#'
+      aria-label='Account'
+      )
+      +icon('bookmark_outline').mdc-top-app-bar__action-item(
+      href='#'
+      aria-label='Bookmark this page'
+      data-scroll='#__10'
+      )

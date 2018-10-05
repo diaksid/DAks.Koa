@@ -1,36 +1,56 @@
 // import * as MDC from 'javascripts/mdc-web'
-import { PRO } from '@pro'
+import {
+  MDCDrawer,
+  MDCList,
+  MDCRipple,
+  MDCTopAppBar
+} from 'javascripts/mdc-web'
+import {
+  PRO,
+  PROonReady,
+  PROonLoad
+} from '@pro'
+import '@pro/extends/events'
+import '@pro/extends/click'
+import '@pro/animation/scroll'
 
-window.PRO = PRO
+function onReady () {
+  const nodeMain = document.querySelector('main')
 
-/*
-let turbo = !!window.Turbolinks
+  PRO('.h-mimic-scrollbar').each(el => {
+    el.style.paddingRight = `${window.innerWidth - nodeMain.clientWidth}px`
+  })
 
-function ready () {
-  const drawer = MDC.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'))
-  const list = MDC.list.MDCList.attachTo(document.querySelector('.mdc-list'))
+  const drawer = MDCDrawer.attachTo(document.querySelector('.mdc-drawer'))
+
+  const list = MDCList.attachTo(document.querySelector('.mdc-list'))
   list.wrapFocus = true
-  const topAppBar = MDC.topAppBar.MDCTopAppBar.attachTo(document.querySelector('.mdc-top-app-bar'))
+
+  const topAppBar = MDCTopAppBar.attachTo(document.querySelector('.mdc-top-app-bar'))
+  topAppBar.setScrollTarget(nodeMain)
   topAppBar.listen('MDCTopAppBar:nav', () => {
     drawer.open = !drawer.open
   })
-  document.querySelectorAll('.mdc-ripple-surface').forEach(function (el) {
-    (MDC.ripple.MDCRipple.attachTo(el)).unbounded = true
+
+  PRO('.mdc-ripple-surface').each(el => {
+    MDCRipple.attachTo(el).unbounded = true
   })
-  // new Pro('.mdc-ripple-surface').each(function (el) {
-  //   (MDC.ripple.MDCRipple.attachTo(el)).unbounded = true
-  // })
 
   PRO('.is-active, .is-active > a, a[href="#"]').deactive()
-  PRO()
-    .lazyload()
-    .lightbox('[data-lightbox]')
-    .scroll()
+
+  // PRO()
+  //   .scroll()
+  //   .lazyload()
+  //   .lightbox('[data-lightbox]')
 }
 
-function load () {
+function onLoad () {
 }
 
+PROonReady(onReady)
+PROonLoad(onLoad)
+
+/*
 PRO()
   .onready(ready)
   .onload(load)

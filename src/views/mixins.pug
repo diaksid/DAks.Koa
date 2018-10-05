@@ -1,0 +1,9 @@
+mixin icon(code)
+  if attributes.href
+    a.material-icons(aria-hidden='true')&attributes(attributes)= code
+  else
+    span.material-icons(aria-hidden='true')&attributes(attributes)= code
+  //-span.icon(
+    class=`icon-${code}`
+    aria-hidden='true'
+    )&attributes(attributes)

@@ -29,7 +29,7 @@ app.use(koaCompress({
   flush: require('zlib').Z_SYNC_FLUSH
 }))
 
-app.use(koaViews(path.resolve(config.path.src, 'views', 'mdc-web'), {
+app.use(koaViews(path.resolve(config.path.src, 'views'), {
   extension: 'pug',
   options: { assets: assets }
 }))

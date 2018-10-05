@@ -1,5 +1,6 @@
 import { Pro } from '../pro'
 import './frame'
+import '../extends/properties'
 
 Pro.assign({
   scrollTo (x, y, options, callback) {
@@ -9,9 +10,9 @@ Pro.assign({
     }
     options = Pro.assign({ duration: Pro.animation.duration }, options)
     let steps = options.duration / Pro.animation.delay
-    let stepX = ((window.pageXOffset || document.documentElement.scrollLeft) - x) / steps
-    let stepY = ((window.pageYOffset || document.documentElement.scrollTop) - y) / steps
-    let render = () => {
+    const stepX = ((window.pageYOffset || document.documentElement.scrollTop) - x) / steps
+    const stepY = ((window.pageXOffset || document.documentElement.scrollLeft) - y) / steps
+    const render = () => {
       window.scrollBy(-stepX, -stepY)
       if (--steps) {
         Pro.animation.request(render, window)
@@ -33,17 +34,17 @@ Pro.assign({
     if (typeof options === 'number') {
       options = { duration: options }
     }
-    return this.scrollTo(0, 0, options, callback)
+    return Pro.scrollTo(0, 0, options, callback)
   },
 
   toobj (obj, options, callback) {
     if (typeof options === 'number') {
       options = { margin: options }
     }
-    options = this.assign({ margin: 0 }, options)
-    obj = this.to(obj)
+    options = Pro.assign({ margin: 0 }, options)
+    obj = Pro.to(obj)
     if (obj.length) {
-      this.scrollTo(0, obj.offset().top - options.margin, options, callback)
+      Pro.scrollTo(0, obj.offset().top - options.margin, options, callback)
     }
     return this
   },
@@ -58,7 +59,7 @@ Pro.assign({
     new Pro(options.selector || '[data-scroll]')
       .deactive()
       .onclick(function () {
-        let selector = this.dataset.scroll || this.getAttribute('href')
+        const selector = this.dataset.scroll || this.getAttribute('href')
         if (selector &&
           !this.classList.contains('is-active') &&
           !this.parentNode.classList.contains('is-active')) {
