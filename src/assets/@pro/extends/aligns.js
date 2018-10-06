@@ -1,12 +1,12 @@
-import { Pro } from '../pro'
+import PRO from '../pro'
 import PROaligns from '../components/aligns'
 
-Pro.aligns = function () {
+PRO.aligns = function () {
   PROaligns(...arguments)
   return this
 }
 
-Pro.prototype.aligns = function (selector) {
+PRO.prototype.aligns = function (selector) {
   if (selector) {
     this.each(function () {
       PROaligns(selector, this)

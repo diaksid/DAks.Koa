@@ -1,6 +1,6 @@
-import { Pro } from '../pro'
+import PRO from '../pro'
 
-Pro.assign({
+PRO.assign({
   deactive () {
     return this.onclick(event => {
       event.preventDefault()

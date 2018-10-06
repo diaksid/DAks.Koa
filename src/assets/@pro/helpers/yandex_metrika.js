@@ -1,10 +1,10 @@
-import { Pro } from '../pro'
+import PRO from '../pro'
 import '../extends/deactive'
 
 const PROyandexMetrika = function (selector = '[data-yandex-metrika]') {
-  return Pro.to(selector).each(element => {
+  return PRO.to(selector).each(element => {
     if (element.dataset && element.dataset.yandexMetrika) {
-      new Pro(element)
+      PRO(element)
         .deactive()
         .onclick(el => window.open(
           `//metrika.yandex.ru/dashboard?id=${el.dataset.yandexMetrika}`,

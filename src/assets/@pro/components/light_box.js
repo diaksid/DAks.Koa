@@ -1,4 +1,4 @@
-import { Pro } from '../pro'
+import PRO from '../pro'
 import '../extends/html'
 import PROdata from '../helpers/dataset'
 
@@ -45,27 +45,27 @@ const PROlightBox = (function () {
       if (!this._overlay) {
         this._events = {}
         for (let event in Events) {
-          this._events[event] = Pro.newEvent(Events[event])
+          this._events[event] = PRO.newEvent(Events[event])
         }
-        this._overlay = Pro.tag('div')
+        this._overlay = PRO.tag('div')
           .addClass(`${this._dataKey}-overlay`)
           .hide()
-        this._content = Pro.tag('div')
+        this._content = PRO.tag('div')
           .addClass(`${this._dataKey}-content`)
           .onclick(event => event.stopPropagation())
-        this._modal = Pro.tag('div')
+        this._modal = PRO.tag('div')
           .addClass(`${this._dataKey}-modal`)
           .hide()
-        this._image = Pro.tag('img')
+        this._image = PRO.tag('img')
           .addClass(`${this._dataKey}-image`)
           .hide()
-        this._next = Pro.tag('div')
+        this._next = PRO.tag('div')
           .addClass(`${this._dataKey}-next`)
           .hide()
-        this._prev = Pro.tag('div')
+        this._prev = PRO.tag('div')
           .addClass(`${this._dataKey}-prev`)
           .hide()
-        this._close = Pro.tag('div')
+        this._close = PRO.tag('div')
           .addClass(`${this._dataKey}-close`)
         this._content.append(this._modal)
         this._content.append(this._image)
@@ -74,7 +74,7 @@ const PROlightBox = (function () {
         this._content.append(this._close)
         this._overlay.append(this._content)
       }
-      this._body = new Pro(document.body)
+      this._body = PRO(document.body)
       if (!this._overlay.isConnected) {
         this._body.append(this._overlay)
       }
@@ -135,7 +135,7 @@ const PROlightBox = (function () {
     }
 
     constructor (options) {
-      this._options = Pro.assign({}, Default, options)
+      this._options = PRO.assign({}, Default, options)
       this._stack = {}
       // this._group = this._path = null
       PROlightBox._init(this)
@@ -154,7 +154,7 @@ const PROlightBox = (function () {
             this._stack[group].push(path)
           }
         }
-        new Pro(element).onclick(event => {
+        PRO(element).onclick(event => {
           event.preventDefault()
           event.stopPropagation()
           this._path = path
@@ -174,7 +174,7 @@ const PROlightBox = (function () {
       PROlightBox._image.hide()
       PROlightBox._next.hide()
       PROlightBox._prev.hide()
-      const element = new Pro(this._path).first
+      const element = PRO(this._path).first
       if (element) {
         PROlightBox._content.addClass(`${PROlightBox._dataKey}-content--html`)
         PROlightBox._modal

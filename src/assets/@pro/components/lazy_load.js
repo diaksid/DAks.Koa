@@ -1,4 +1,4 @@
-import { Pro } from '../pro'
+import PRO from '../pro'
 import {
   PROouterHeight,
   PROouterWidth,
@@ -33,11 +33,11 @@ const PROlazyLoad = (function () {
 
   class PROlazyLoad {
     static update () {
-      return document.dispatchEvent(Pro.newEvent(Events.UPDATE))
+      return document.dispatchEvent(PRO.newEvent(Events.UPDATE))
     }
 
     static reset () {
-      return document.dispatchEvent(Pro.newEvent(Events.RESET))
+      return document.dispatchEvent(PRO.newEvent(Events.RESET))
     }
 
     static get name () {
@@ -53,15 +53,15 @@ const PROlazyLoad = (function () {
     }
 
     constructor (scope, event, options) {
-      if (Pro.isObject(scope)) {
+      if (PRO.isObject(scope)) {
         options = scope
         scope = null
-      } else if (Pro.isObject(event)) {
+      } else if (PRO.isObject(event)) {
         options = event
         event = null
       }
-      this._options = Pro.assign({}, Default, options)
-      this._scope = scope && new Pro(scope)
+      this._options = PRO.assign({}, Default, options)
+      this._scope = scope && PRO(scope)
       this._event = event || 'scroll'
       if (this._scope) {
         this._scope.on(this._event, this._update.bind(this))
@@ -117,13 +117,13 @@ const PROlazyLoad = (function () {
 
     constructor (element, options) {
       this._element = element
-      this._obj = new Pro(this._element)
+      this._obj = PRO(this._element)
       // this._scope = scope
       this._options = options
       this._delay = this._element.dataset[`${this._options.attribute}Delay`] || this._options.delay
       this._duration = this._element.dataset[`${this._options.attribute}Duration`] || this._options.duration
       this._opacity = this._element.dataset[`${this._options.attribute}Opacity`] || 1
-      this._appearance = this._opacity * Pro.animation.delay / this._duration
+      this._appearance = this._opacity * PRO.animation.delay / this._duration
       this._obj.on(Events.APPEAR, this._appear.bind(this))
     }
 
@@ -206,7 +206,7 @@ const PROlazyLoad = (function () {
       this._dataKey = 'loaded'
       this._element.style.opacity = parseFloat(this._element.style.opacity) + this._appearance
       if (this._opacity - this._element.style.opacity >= this._appearance) {
-        Pro.animation.request(this._animate.bind(this))
+        PRO.animation.request(this._animate.bind(this))
       } else {
         this._element.style.opacity = this._opacity
         if (typeof this._options.after === 'function') {

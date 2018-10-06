@@ -1,11 +1,11 @@
-import { Pro } from '../pro'
+import PRO from '../pro'
 import PROstyle from '../helpers/style'
 
-Pro.assign({
+PRO.assign({
   style: PROstyle
 })
 
-Pro.assign({
+PRO.assign({
   html (value = null) {
     if (value !== null) {
       return this.each(el => {
@@ -17,9 +17,9 @@ Pro.assign({
 
   style (data) {
     if (typeof data === 'object') {
-      return this.each(el => Pro.style(el, data))
+      return this.each(el => PRO.style(el, data))
     }
-    return this.length && Pro.style(this.first.style, data)
+    return this.length && PRO.style(this.first.style, data)
   },
 
   addClass (...args) {
@@ -40,7 +40,7 @@ Pro.assign({
 
   append (child) {
     if (child && this.length) {
-      Pro.to(child).each(el => {
+      PRO.to(child).each(el => {
         this.first.appendChild(el)
       })
     }

@@ -1,4 +1,4 @@
-import { Pro } from '../pro'
+import PRO from '../pro'
 import {
   PROinnerHeight,
   PROinnerWidth,
@@ -10,7 +10,7 @@ import {
   PROview
 } from '../helpers/properties'
 
-Pro.assign({
+PRO.assign({
   innerHeight: PROinnerHeight,
   innerWidth: PROinnerWidth,
   outerHeight: PROouterHeight,
@@ -31,7 +31,7 @@ for (let method of [
   'offset',
   'view'
 ]) {
-  Pro.prototype[method] = function (param) {
-    return this.length && Pro[method](this.first, param)
+  PRO.prototype[method] = function (param) {
+    return this.length && PRO[method](this.first, param)
   }
 }

@@ -1,4 +1,3 @@
-// import * as MDC from 'javascripts/mdc-web'
 import {
   MDCDrawer,
   MDCList,
@@ -38,10 +37,12 @@ function onReady () {
 
   PRO('.is-active, .is-active > a, a[href="#"]').deactive()
 
-  // PRO()
-  //   .scroll()
-  //   .lazyload()
-  //   .lightbox('[data-lightbox]')
+  /*
+  PRO
+    .scroll()
+    .lazyload()
+    .lightbox('[data-lightbox]')
+ */
 }
 
 function onLoad () {
@@ -49,22 +50,3 @@ function onLoad () {
 
 PROonReady(onReady)
 PROonLoad(onLoad)
-
-/*
-PRO()
-  .onready(ready)
-  .onload(load)
-
-if (turbo) {
-  document.addEventListener('turbolinks:visit', function () {
-    turbo = 'visit'
-  })
-  document.addEventListener('turbolinks:load', function () {
-    if (turbo === 'visit') {
-      ready()
-      load()
-    }
-  })
-  // document.addEventListener('turbolinks:before-cache', function () {})
-}
-*/

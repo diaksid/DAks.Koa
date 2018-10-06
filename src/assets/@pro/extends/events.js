@@ -1,6 +1,6 @@
-import { Pro } from '../pro'
+import PRO from '../pro'
 
-Pro.assign({
+PRO.assign({
   on (element, type, callback) {
     if (typeof element === 'string') {
       callback = type
@@ -47,7 +47,7 @@ Pro.assign({
   }
 })
 
-Pro.assign({
+PRO.assign({
   on (type, callback) {
     return this.each(function () {
       this.addEventListener(type, callback)
@@ -62,7 +62,7 @@ Pro.assign({
 
   onclick (callback) {
     return this.each(function () {
-      Pro.onclick(this, callback)
+      PRO.onclick(this, callback)
     })
   }
 }, true)

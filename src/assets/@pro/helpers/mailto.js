@@ -1,7 +1,7 @@
-import { Pro } from '../pro'
+import PRO from '../pro'
 
 const PROmailto = function (selector = '[data-mailto]') {
-  return Pro.to(selector).each(element => {
+  return PRO.to(selector).each(element => {
     const mail = element.dataset && atob(element.dataset.mailto)
     if (mail) {
       element.href = `mailto://${mail}`

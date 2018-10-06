@@ -1,4 +1,4 @@
-import { Pro } from '../pro'
+import PRO from '../pro'
 import '../helpers/assets'
 
 const Default = {
@@ -12,17 +12,17 @@ const Default = {
 
 class Ymaps {
   constructor (options) {
-    this.options = Pro.assign({}, Default, options)
+    this.options = PRO.assign({}, Default, options)
   }
 
   load (selector) {
-    this.select = Pro.to(selector || this.options.selector)
+    this.select = PRO.to(selector || this.options.selector)
     if (this.select.length) {
       const fn = () => ymaps.ready(() => this.select.each(el => this._ymap(el)))
       if (window.ymaps) {
         fn()
       } else {
-        Pro.script(`//api-maps.yandex.ru/2.1/?lang=${this.options.locale || 'ru_RU'}`, fn)
+        PRO.script(`//api-maps.yandex.ru/2.1/?lang=${this.options.locale || 'ru_RU'}`, fn)
       }
     }
     return this.select
@@ -76,7 +76,7 @@ class Ymaps {
 }
 
 function PROymaps (selector, options) {
-  if (Pro.isObject(selector)) {
+  if (PRO.isObject(selector)) {
     options = selector
     selector = null
   }

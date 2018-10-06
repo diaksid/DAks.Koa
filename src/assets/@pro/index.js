@@ -1,4 +1,4 @@
-import { PRO } from './pro'
+import PRO from './pro'
 import {
   PROstylesheet,
   PROscript

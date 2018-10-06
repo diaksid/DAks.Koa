@@ -1,51 +1,53 @@
-class Pro {
-  static to (data) {
-    return data instanceof Pro ? data : new Pro(data)
-  }
+const PRO = function () {
+  return arguments.length ? new Pro(...arguments) : this
+}
 
-  static tag (tag) {
-    return typeof tag === 'string' && new Pro(document.createElement(tag))
-  }
+PRO.isObject = function (obj) {
+  return obj !== null && typeof obj === 'object' && (!obj.constructor || obj.constructor === Object) &&
+    Object.prototype.toString.call(obj) === '[object Object]'
+}
 
-  static assign (obj, ...args) {
-    if (args.length > 1) {
-      for (let arg of args) {
-        obj = this.assign(obj, arg)
-      }
-    } else if (typeof obj === 'object') {
-      let data = args[0]
-      if (typeof args[0] !== 'object') {
-        data = obj
-        obj = args[0] ? this.prototype : this
-      }
-      for (let key in data) {
-        if (data.hasOwnProperty(key)) {
+PRO.assign = function (obj, ...args) {
+  if (args.length > 1) {
+    for (let arg of args) {
+      obj = this.assign(obj, arg)
+    }
+  } else if (typeof obj === 'object') {
+    let data = args[0]
+    if (typeof args[0] !== 'object') {
+      data = obj
+      obj = args[0] ? this.prototype : this
+    }
+    for (let key in data) {
+      if (data.hasOwnProperty(key)) {
+        if (this.isObject(data[key]) && obj.hasOwnProperty(key) && this.isObject(obj[key])) {
+          this.assign(obj[key], data[key])
+        } else {
           obj[key] = data[key]
-          /*
-          if (typeof data[key] === 'object' && obj.hasOwnProperty(key)) {
-            obj[key] = this.assign(obj[key], data[key])
-          } else {
-            obj[key] = data[key]
-          }
-          */
         }
       }
     }
-    return obj
   }
+  return obj
+}
 
-  static isObject (obj) {
-    return typeof obj === 'object' &&
-      (!obj.constructor || obj.constructor === Object) &&
-      Object.prototype.toString.call(obj) === '[object Object]'
-  }
+PRO.assign({
+  to (data) {
+    return data instanceof Pro ? data : new Pro(data)
+  },
 
-  static count (data) {
+  tag (tag) {
+    return typeof tag === 'string' && new Pro(document.createElement(tag))
+  },
+
+  count (data) {
     return data.length !== null ? data.length : [].slice.call(data).length
-  }
+  },
 
-  static console (type, message) {
-    if (this._debug) {
+  debug: false,
+
+  console (type, message) {
+    if (this.debug) {
       if (message === null) {
         message = type
         type = 'log'
@@ -53,21 +55,17 @@ class Pro {
       console[type](message)
     }
     return this
-  }
+  },
 
-  static message (message) {
+  message (message) {
     return this.console(message)
-  }
+  },
 
-  static error (message) {
+  error (message) {
     return this.console('error', message)
-  }
+  },
 
-  static set debug (value) {
-    this._debug = !!value
-  }
-
-  static _find (selector, context) {
+  _find (selector, context) {
     if (context instanceof Node || context instanceof Window) {
       context = [context]
     } else if (context instanceof Pro) {
@@ -81,28 +79,31 @@ class Pro {
     } else if (selector instanceof Pro) {
       return selector.target
     } else if (typeof selector === 'string') {
-      let arr = []
+      let res = []
       for (let ctx of context) {
         let list = [].slice.call(ctx.querySelectorAll(selector))
         for (let el of list) {
-          if (arr.indexOf(el) === -1) {
-            arr.push(el)
+          if (res.indexOf(el) === -1) {
+            res.push(el)
           }
         }
       }
-      return arr
+      return res
     }
   }
+})
 
+class Pro extends PRO {
   constructor (selector, context) {
-    this._target = Pro._find(context)
+    super()
+    this._target = PRO._find(context)
     this.find(selector)
   }
 
   find (selector) {
     this.selector = selector
     this.context = this._target
-    this._target = Pro.find(this.selector, this.context)
+    this._target = PRO._find(this.selector, this.context)
     return this
   }
 
@@ -134,8 +135,4 @@ class Pro {
   }
 }
 
-const PRO = function () {
-  return arguments.length ? new Pro(...arguments) : Pro
-}
-
-export { Pro, PRO }
+export default PRO

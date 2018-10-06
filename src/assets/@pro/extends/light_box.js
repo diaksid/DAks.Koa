@@ -1,15 +1,15 @@
-import { Pro } from '../pro'
+import PRO from '../pro'
 import '../helpers/dataset'
 import PROlightBox from '../components/light_box'
 
-Pro.LightBox = PROlightBox
+PRO.LightBox = PROlightBox
 
-Pro.prototype[PROlightBox.name] = function () {
+PRO.prototype[PROlightBox.name] = function () {
   const instance = new PROlightBox(...arguments)
   return this.each(el => instance.load(el))
 }
 
-Pro[PROlightBox.name] = function () {
-  new Pro(`[data-${Pro.data.toKey(PROlightBox.default.attribute)}]`)[PROlightBox.name](...arguments)
+PRO[PROlightBox.name] = function () {
+  PRO(`[data-${PRO.data.toKey(PROlightBox.default.attribute)}]`)[PROlightBox.name](...arguments)
   return this
 }

@@ -1,9 +1,9 @@
-import { Pro } from '../pro'
+import PRO from '../pro'
 import { PROinnerHeight } from '../helpers/properties'
 
 const PROaligns = function (selector, context) {
   let val = 0
-  return new Pro(selector, context)
+  return PRO(selector, context)
     .each(function () {
       this.style.height = ''
       const height = PROinnerHeight(this)

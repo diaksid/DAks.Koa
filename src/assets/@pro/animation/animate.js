@@ -1,7 +1,7 @@
-import { Pro } from '../pro'
+import PRO from '../pro'
 import './frame'
 
-Pro.assign({
+PRO.assign({
   animate (el, options, callback) {
     if (typeof el === 'string') {
       el = document.querySelector(el)
@@ -14,13 +14,13 @@ Pro.assign({
     if (options.from) {
       el.style[property] = from + unit
     }
-    let steps = (options.duration || Pro.animation.duration) / Pro.animation.delay
+    let steps = (options.duration || PRO.animation.duration) / PRO.animation.delay
     let step = (from - to) / steps
     let render = () => {
       from -= step
       el.style[property] = from + unit
       if (--steps > 0) {
-        el.dataset.animate = Pro.animation.request(render, el)
+        el.dataset.animate = PRO.animation.request(render, el)
       } else {
         el.style[property] = to + unit
         delete el.dataset.animate
@@ -42,7 +42,7 @@ Pro.assign({
     }
     let fn = () => {
       if (el.dataset.animate) {
-        setTimeout(fn, 1000 / Pro.animation.delay)
+        setTimeout(fn, 1000 / PRO.animation.delay)
       } else if (typeof callback === 'function') {
         callback()
       }
@@ -56,7 +56,7 @@ Pro.assign({
       el = document.querySelector(el)
     }
     if (el.dataset.animate) {
-      Pro.animation.cancel(el.dataset.animate)
+      PRO.animation.cancel(el.dataset.animate)
       delete el.dataset.animate
     }
     return this
@@ -72,7 +72,7 @@ Pro.assign({
     }
     if (duration) {
       this.queue(el, () => {
-        Pro.animate(el, { opacity: 0, duration: duration }, () => {
+        PRO.animate(el, { opacity: 0, duration: duration }, () => {
           el.style.display = 'none'
           if (typeof callback === 'function') {
             callback.call(el)
@@ -100,7 +100,7 @@ Pro.assign({
           el.style.display = ''
           el.style.opacity = 0
         }
-        Pro.animate(el, { opacity: 1, duration: duration }, callback)
+        PRO.animate(el, { opacity: 1, duration: duration }, callback)
       })
     } else {
       el.style.display = ''
@@ -110,43 +110,43 @@ Pro.assign({
   }
 })
 
-Pro.assign({
+PRO.assign({
   animate (options, callback) {
     return this.each(function () {
-      Pro.animate(this, options, callback)
+      PRO.animate(this, options, callback)
     })
   },
 
   queue (callback) {
     return this.each(function () {
-      Pro.queue(this, callback)
+      PRO.queue(this, callback)
     })
   },
 
   stop () {
     return this.each(function () {
-      Pro.stop(this)
+      PRO.stop(this)
     })
   },
 
   hide (duration, callback) {
     return this.each(function () {
-      Pro.hide(this, duration, callback)
+      PRO.hide(this, duration, callback)
     })
   },
 
   show (duration, callback) {
     return this.each(function () {
-      Pro.show(this, duration, callback)
+      PRO.show(this, duration, callback)
     })
   },
 
   toggle (duration, callback) {
     return this.each(function () {
       if (this.style.display === 'none') {
-        Pro.show(this, duration, callback)
+        PRO.show(this, duration, callback)
       } else {
-        Pro.hide(this, duration, callback)
+        PRO.hide(this, duration, callback)
       }
     })
   }
