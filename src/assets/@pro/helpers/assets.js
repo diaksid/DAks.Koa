@@ -7,7 +7,7 @@ function pathCheck (path) {
   return path
 }
 
-function PROstylesheet (path, options, callback) {
+const PROstylesheet = function (path, options, callback) {
   if (typeof options === 'function') {
     callback = options
     options = null
@@ -23,11 +23,9 @@ function PROstylesheet (path, options, callback) {
   if (typeof callback === 'function') {
     el.addEventListener('load', callback)
   }
-
   function fn () {
     document.head.appendChild(el)
   }
-
   if (window.opera === '[object Opera]') {
     PROonReady(fn)
   } else {
@@ -35,7 +33,7 @@ function PROstylesheet (path, options, callback) {
   }
 }
 
-function PROscript (path, options, callback) {
+const PROscript = function (path, options, callback) {
   if (typeof options === 'function') {
     callback = options
     options = null
@@ -55,11 +53,9 @@ function PROscript (path, options, callback) {
     el.addEventListener('load', callback)
   }
   const parent = window.Turbolinks ? 'head' : 'body'
-
   function fn () {
     document[parent].appendChild(el)
   }
-
   if (window.opera === '[object Opera]') {
     PROonReady(fn)
   } else {

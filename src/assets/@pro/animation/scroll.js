@@ -1,4 +1,5 @@
 import { Pro } from '../pro'
+import '../extends/deactive'
 
 const documentElement = document.documentElement
 

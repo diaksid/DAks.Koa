@@ -1,24 +1,24 @@
 class Pro {
   constructor (selector, context) {
-    this.target = Pro.find(context)
+    this._target = Pro.find(context)
     this.find(selector)
   }
 
   find (selector) {
     this.selector = selector
-    this.context = this.target
-    this.target = Pro.find(this.selector, this.context)
+    this.context = this._target
+    this._target = Pro.find(this.selector, this.context)
     return this
   }
 
   each (callback, args = null) {
-    for (let i = 0; i < this.target.length; i++) {
+    for (let i = 0; i < this._target.length; i++) {
       if (args === null) {
-        if (callback.call(this.target[i], this.target[i], i) === false) {
+        if (callback.call(this._target[i], this._target[i], i) === false) {
           break
         }
       } else {
-        if (callback.apply(this.target[i], args) === false) {
+        if (callback.apply(this._target[i], args) === false) {
           break
         }
       }
@@ -27,11 +27,15 @@ class Pro {
   }
 
   get length () {
-    return this.target.length
+    return this._target.length
   }
 
   get first () {
-    return this.target[0]
+    return this._target[0]
+  }
+
+  get isConnected () {
+    return this._target.every(el => el.isConnected)
   }
 
   static find (selector, context) {
@@ -92,6 +96,10 @@ class Pro {
     return data instanceof Pro ? data : new Pro(data)
   }
 
+  static tag (tag) {
+    return typeof tag === 'string' && new Pro(document.createElement(tag))
+  }
+
   static isObject (obj) {
     return typeof obj === 'object' &&
       (!obj.constructor || obj.constructor === Object) &&
@@ -126,8 +134,8 @@ class Pro {
   }
 }
 
-function PRO () {
+const PRO = function () {
   return arguments.length ? new Pro(...arguments) : Pro
 }
 
-export { PRO, Pro }
+export { Pro, PRO }

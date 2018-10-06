@@ -1,4 +1,4 @@
-function PROnewEvent (name, bubble = false, cancelable = false) {
+const PROnewEvent = function (name, bubble = false, cancelable = false) {
   let event
   if (typeof Event === 'function') {
     event = new Event(name, {
@@ -12,7 +12,7 @@ function PROnewEvent (name, bubble = false, cancelable = false) {
   return event
 }
 
-function PROonReady (element, callback) {
+const PROonReady = function (element, callback) {
   if (typeof element === 'function') {
     callback = element
     element = document
@@ -20,7 +20,7 @@ function PROonReady (element, callback) {
   return element.addEventListener('DOMContentLoaded', callback)
 }
 
-function PROonLoad (element, callback) {
+const PROonLoad = function (element, callback) {
   if (typeof element === 'function') {
     callback = element
     element = window
@@ -28,7 +28,7 @@ function PROonLoad (element, callback) {
   return element.addEventListener('load', callback)
 }
 
-function PROonResize (element, callback) {
+const PROonResize = function (element, callback) {
   if (typeof element === 'function') {
     callback = element
     element = window
@@ -36,7 +36,7 @@ function PROonResize (element, callback) {
   return element.addEventListener('resize', callback)
 }
 
-function PROonScroll (element, callback) {
+const PROonScroll = function (element, callback) {
   if (typeof element === 'function') {
     callback = element
     element = window
@@ -44,4 +44,10 @@ function PROonScroll (element, callback) {
   return element.addEventListener('scroll', callback)
 }
 
-export { PROnewEvent, PROonReady, PROonLoad, PROonResize, PROonScroll }
+export {
+  PROnewEvent,
+  PROonReady,
+  PROonLoad,
+  PROonResize,
+  PROonScroll
+}

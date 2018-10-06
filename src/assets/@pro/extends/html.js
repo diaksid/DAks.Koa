@@ -1,19 +1,8 @@
 import { Pro } from '../pro'
+import PROstyle from '../helpers/style'
 
 Pro.assign({
-  style (el, data) {
-    if (typeof data === 'object') {
-      for (let key in data) {
-        el.style[key] = data[key]
-      }
-      return this
-    } else {
-      const style = el.ownerDocument.defaultView.opener
-        ? el.ownerDocument.defaultView.getComputedStyle(el, null)
-        : window.getComputedStyle(el, null)
-      return (typeof data === 'string') ? style[data] : style
-    }
-  }
+  style: PROstyle
 })
 
 Pro.assign({
@@ -51,10 +40,9 @@ Pro.assign({
 
   append (child) {
     if (child && this.length) {
-      child = Pro.to(child)
-      if (child.length) {
-        this.first.appendChild(child.first)
-      }
+      Pro.to(child).each(el => {
+        this.first.appendChild(el)
+      })
     }
     return this
   }

@@ -1,7 +1,7 @@
 import { Pro } from '../pro'
-import '../extends/click'
+import '../extends/deactive'
 
-function PROw3c (selector = '[data-w3c]') {
+const PROw3c = function (selector = '[data-w3c]') {
   return Pro.to(selector)
     .deactive()
     .onclick(() => window.open(

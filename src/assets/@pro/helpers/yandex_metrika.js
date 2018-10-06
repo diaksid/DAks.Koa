@@ -1,7 +1,7 @@
 import { Pro } from '../pro'
-import '../extends/click'
+import '../extends/deactive'
 
-function PROyandexMetrika (selector = '[data-yandex-metrika]') {
+const PROyandexMetrika = function (selector = '[data-yandex-metrika]') {
   return Pro.to(selector).each(element => {
     if (element.dataset && element.dataset.yandexMetrika) {
       new Pro(element)

@@ -1,6 +1,6 @@
 import { Pro } from '../pro'
 
-function PROmailto (selector = '[data-mailto]') {
+const PROmailto = function (selector = '[data-mailto]') {
   return Pro.to(selector).each(element => {
     const mail = element.dataset && atob(element.dataset.mailto)
     if (mail) {

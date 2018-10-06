@@ -11,7 +11,7 @@ import {
   PROonLoad
 } from '@pro'
 import '@pro/extends/events'
-import '@pro/extends/click'
+import '@pro/extends/deactive'
 import '@pro/animation/scroll'
 
 function onReady () {
