@@ -119,7 +119,7 @@ const PROlazyLoad = (function () {
       this._delay = this._element.dataset[`${this._options.attribute}Delay`] || this._options.delay
       this._duration = this._element.dataset[`${this._options.attribute}Duration`] || this._options.duration
       this._opacity = this._element.dataset[`${this._options.attribute}Opacity`] || 1
-      this._appearance = this._opacity * PRO.animation.delay / this._duration
+      this._appearance = this._opacity * PRO.tweens.delay / this._duration
       this._obj.on(Events.APPEAR, this._appear.bind(this))
     }
 
@@ -202,7 +202,7 @@ const PROlazyLoad = (function () {
       this._dataKey = 'loaded'
       this._element.style.opacity = parseFloat(this._element.style.opacity) + this._appearance
       if (this._opacity - this._element.style.opacity >= this._appearance) {
-        PRO.animation.request(this._animate.bind(this))
+        PRO.tweens.request(this._animate.bind(this))
       } else {
         this._element.style.opacity = this._opacity
         if (typeof this._options.after === 'function') {

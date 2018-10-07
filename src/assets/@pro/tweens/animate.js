@@ -14,13 +14,13 @@ PRO.assign({
     if (options.from) {
       el.style[property] = from + unit
     }
-    let steps = (options.duration || PRO.animation.duration) / PRO.animation.delay
+    let steps = (options.duration || PRO.tweens.duration) / PRO.tweens.delay
     let step = (from - to) / steps
     let render = () => {
       from -= step
       el.style[property] = from + unit
       if (--steps > 0) {
-        el.dataset.animate = PRO.animation.request(render, el)
+        el.dataset.animate = PRO.tweens.request(render, el)
       } else {
         el.style[property] = to + unit
         delete el.dataset.animate
@@ -42,7 +42,7 @@ PRO.assign({
     }
     let fn = () => {
       if (el.dataset.animate) {
-        setTimeout(fn, 1000 / PRO.animation.delay)
+        setTimeout(fn, 1000 / PRO.tweens.delay)
       } else if (typeof callback === 'function') {
         callback()
       }
@@ -56,7 +56,7 @@ PRO.assign({
       el = document.querySelector(el)
     }
     if (el.dataset.animate) {
-      PRO.animation.cancel(el.dataset.animate)
+      PRO.tweens.cancel(el.dataset.animate)
       delete el.dataset.animate
     }
     return this

@@ -9,14 +9,14 @@ PRO.assign({
       callback = options
       options = null
     }
-    options = PRO.assign({ duration: PRO.animation.duration }, options)
-    let steps = options.duration / PRO.animation.delay
+    options = PRO.assign({ duration: PRO.tweens.duration }, options)
+    let steps = options.duration / PRO.tweens.delay
     let stepX = ((window.pageXOffset || documentElement.scrollLeft) - x) / steps
     let stepY = ((window.pageYOffset || documentElement.scrollTop) - y) / steps
     let render = () => {
       window.scrollBy(-stepX, -stepY)
       if (--steps) {
-        PRO.animation.request(render, window)
+        PRO.tweens.request(render, window)
       } else {
         window.scrollTo(x, y)
         if (typeof callback === 'function') {

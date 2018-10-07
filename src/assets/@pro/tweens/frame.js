@@ -3,7 +3,7 @@ import PRO from '../pro'
 const ANIMATION_DELAY = 60
 const ANIMATION_DURATION = 1000
 
-PRO.animation = {
+PRO.tweens = {
   delay: ANIMATION_DELAY,
   duration: ANIMATION_DURATION,
 
