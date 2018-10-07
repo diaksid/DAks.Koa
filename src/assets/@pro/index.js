@@ -26,7 +26,7 @@ import {
 } from './helpers/properties'
 import PROstyle from './helpers/style'
 import PROw3c from './helpers/w3c'
-import PROyandexMetrika from './helpers/yandex_metrika'
+import PROyandexMetrika from './wrappers/yandex_metrika'
 
 export {
   PRO,
