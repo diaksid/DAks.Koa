@@ -1,6 +1,6 @@
 import PRO from '../pro'
 import '../helpers/dataset'
-import PROlazyLoad from '../components/lazy_load'
+import PROlazyLoad from '../components/lazyload'
 
 PRO.LazyLoad = PROlazyLoad
 

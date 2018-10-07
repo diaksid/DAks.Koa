@@ -1,6 +1,6 @@
 import PRO from '../pro'
 import '../helpers/dataset'
-import PROlightBox from '../components/light_box'
+import PROlightBox from '../components/lightbox'
 
 PRO.LightBox = PROlightBox
 
