@@ -32,6 +32,8 @@ PRO.assign = function (obj, ...args) {
 }
 
 PRO.assign({
+  debug: false,
+
   to (data) {
     return data instanceof Pro ? data : new Pro(data)
   },
@@ -43,8 +45,6 @@ PRO.assign({
   count (data) {
     return data.length !== null ? data.length : [].slice.call(data).length
   },
-
-  debug: false,
 
   console (type, message) {
     if (this.debug) {
@@ -100,6 +100,18 @@ class Pro extends PRO {
     this.find(selector)
   }
 
+  get length () {
+    return this._target.length
+  }
+
+  get first () {
+    return this._target[0]
+  }
+
+  get isConnected () {
+    return this._target.every(el => el.isConnected)
+  }
+
   find (selector) {
     this.selector = selector
     this.context = this._target
@@ -120,18 +132,6 @@ class Pro extends PRO {
       }
     }
     return this
-  }
-
-  get length () {
-    return this._target.length
-  }
-
-  get first () {
-    return this._target[0]
-  }
-
-  get isConnected () {
-    return this._target.every(el => el.isConnected)
   }
 }
 

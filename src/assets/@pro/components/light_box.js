@@ -24,121 +24,15 @@ const PROlightBox = (function () {
   }
 
   class PROlightBox {
-    static on (event, handler) {
-      document.addEventListener(Events[event.toUpperCase()], handler)
-      return this
-    }
-
-    static get name () {
-      return NAME
-    }
-
-    static get version () {
-      return VERSION
-    }
-
-    static get default () {
-      return Default
-    }
-
-    static _init (instance) {
-      if (!this._overlay) {
-        this._events = {}
-        for (let event in Events) {
-          this._events[event] = PRO.newEvent(Events[event])
-        }
-        this._overlay = PRO.tag('div')
-          .addClass(`${this._dataKey}-overlay`)
-          .hide()
-        this._content = PRO.tag('div')
-          .addClass(`${this._dataKey}-content`)
-          .onclick(event => event.stopPropagation())
-        this._modal = PRO.tag('div')
-          .addClass(`${this._dataKey}-modal`)
-          .hide()
-        this._image = PRO.tag('img')
-          .addClass(`${this._dataKey}-image`)
-          .hide()
-        this._next = PRO.tag('div')
-          .addClass(`${this._dataKey}-next`)
-          .hide()
-        this._prev = PRO.tag('div')
-          .addClass(`${this._dataKey}-prev`)
-          .hide()
-        this._close = PRO.tag('div')
-          .addClass(`${this._dataKey}-close`)
-        this._content.append(this._modal)
-        this._content.append(this._image)
-        this._content.append(this._next)
-        this._content.append(this._prev)
-        this._content.append(this._close)
-        this._overlay.append(this._content)
-      }
-      this._body = PRO(document.body)
-      if (!this._overlay.isConnected) {
-        this._body.append(this._overlay)
-      }
-      this._content.style({ padding: instance._options.padding ? `${instance._options.padding}px` : '' })
-      this._overlay
-        .off('click')
-        .onclick(() => instance._hide())
-      this._next
-        .off('click')
-        .onclick(() => instance._step(true))
-      this._prev
-        .off('click')
-        .onclick(() => instance._step())
-      this._close
-        .off('click')
-        .onclick(() => instance._hide())
-      return instance
-    }
-
-    static _show (delay, step) {
-      this._loading(true)
-      if (step) {
-        this._content.show(delay)
-      } else {
-        this._body.style({
-          paddingRight: `${window.innerWidth - this._body.innerWidth()}px`,
-          overflow: 'hidden'
-        })
-        this._overlay.show(delay)
-        document.dispatchEvent(this._events.OPEN)
-      }
-    }
-
-    static _hide (delay, callback) {
-      if (callback) {
-        this._content.hide(delay, callback)
-      } else {
-        this._overlay.hide(delay, () => {
-          this._body.style({
-            paddingRight: '',
-            overflow: ''
-          })
-          document.dispatchEvent(this._events.CLOSE)
-        })
-      }
-    }
-
-    static _loading (done) {
-      if (done) {
-        this._overlay.removeClass(`${this._dataKey}-overlay--load`)
-      } else {
-        this._overlay.addClass(`${this._dataKey}-overlay--load`)
-      }
-    }
-
-    static get _dataKey () {
-      return PROdata.toKey(DATA_KEY)
-    }
-
     constructor (options) {
       this._options = PRO.assign({}, Default, options)
       this._stack = {}
       // this._group = this._path = null
       PROlightBox._init(this)
+    }
+
+    get _index () {
+      return this._group && this._stack[this._group].indexOf(this._path)
     }
 
     load (element) {
@@ -242,8 +136,114 @@ const PROlightBox = (function () {
       this._hide(() => this._draw(true))
     }
 
-    get _index () {
-      return this._group && this._stack[this._group].indexOf(this._path)
+    static get name () {
+      return NAME
+    }
+
+    static get version () {
+      return VERSION
+    }
+
+    static get default () {
+      return Default
+    }
+
+    static on (event, handler) {
+      document.addEventListener(Events[event.toUpperCase()], handler)
+      return this
+    }
+
+    static get _dataKey () {
+      return PROdata.toKey(DATA_KEY)
+    }
+
+    static _init (instance) {
+      if (!this._overlay) {
+        this._events = {}
+        for (let event in Events) {
+          this._events[event] = PRO.newEvent(Events[event])
+        }
+        this._overlay = PRO.tag('div')
+          .addClass(`${this._dataKey}-overlay`)
+          .hide()
+        this._content = PRO.tag('div')
+          .addClass(`${this._dataKey}-content`)
+          .onclick(event => event.stopPropagation())
+        this._modal = PRO.tag('div')
+          .addClass(`${this._dataKey}-modal`)
+          .hide()
+        this._image = PRO.tag('img')
+          .addClass(`${this._dataKey}-image`)
+          .hide()
+        this._next = PRO.tag('div')
+          .addClass(`${this._dataKey}-next`)
+          .hide()
+        this._prev = PRO.tag('div')
+          .addClass(`${this._dataKey}-prev`)
+          .hide()
+        this._close = PRO.tag('div')
+          .addClass(`${this._dataKey}-close`)
+        this._content.append(this._modal)
+        this._content.append(this._image)
+        this._content.append(this._next)
+        this._content.append(this._prev)
+        this._content.append(this._close)
+        this._overlay.append(this._content)
+      }
+      this._body = PRO(document.body)
+      if (!this._overlay.isConnected) {
+        this._body.append(this._overlay)
+      }
+      this._content.style({ padding: instance._options.padding ? `${instance._options.padding}px` : '' })
+      this._overlay
+        .off('click')
+        .onclick(() => instance._hide())
+      this._next
+        .off('click')
+        .onclick(() => instance._step(true))
+      this._prev
+        .off('click')
+        .onclick(() => instance._step())
+      this._close
+        .off('click')
+        .onclick(() => instance._hide())
+      return instance
+    }
+
+    static _show (delay, step) {
+      this._loading(true)
+      if (step) {
+        this._content.show(delay)
+      } else {
+        this._body.style({
+          paddingRight: `${window.innerWidth - this._body.innerWidth()}px`,
+          overflow: 'hidden'
+        })
+        this._overlay.show(delay)
+        document.dispatchEvent(this._events.OPEN)
+      }
+    }
+
+    static _hide (delay, callback) {
+      if (callback) {
+        this._content.hide(delay, callback)
+      } else {
+        this._overlay.hide(delay, () => {
+          this._body.style({
+            paddingRight: '',
+            overflow: ''
+          })
+          document.dispatchEvent(this._events.CLOSE)
+        })
+      }
+    }
+
+    static _loading (done) {
+      if (done) {
+        this._overlay.removeClass(`${this._dataKey}-overlay--load`)
+      } else {
+        this._overlay.addClass(`${this._dataKey}-overlay--load`)
+      }
     }
   }
 

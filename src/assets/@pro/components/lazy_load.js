@@ -32,26 +32,6 @@ const PROlazyLoad = (function () {
   }
 
   class PROlazyLoad {
-    static update () {
-      return document.dispatchEvent(PRO.newEvent(Events.UPDATE))
-    }
-
-    static reset () {
-      return document.dispatchEvent(PRO.newEvent(Events.RESET))
-    }
-
-    static get name () {
-      return NAME
-    }
-
-    static get version () {
-      return VERSION
-    }
-
-    static get default () {
-      return Default
-    }
-
     constructor (scope, event, options) {
       if (PRO.isObject(scope)) {
         options = scope
@@ -104,17 +84,29 @@ const PROlazyLoad = (function () {
       this._items = []
       return this
     }
+
+    static get name () {
+      return NAME
+    }
+
+    static get version () {
+      return VERSION
+    }
+
+    static get default () {
+      return Default
+    }
+
+    static update () {
+      return document.dispatchEvent(PRO.newEvent(Events.UPDATE))
+    }
+
+    static reset () {
+      return document.dispatchEvent(PRO.newEvent(Events.RESET))
+    }
   }
 
   class Lazy {
-    get _dataKey () {
-      return PROdata.getSet(this._element, DATA_KEY)
-    }
-
-    set _dataKey (value) {
-      return PROdata.setSet(this._element, DATA_KEY, value)
-    }
-
     constructor (element, options) {
       this._element = element
       this._obj = PRO(this._element)
@@ -224,6 +216,14 @@ const PROlazyLoad = (function () {
       }
       this._dataKey = 'reset'
       // delete this
+    }
+
+    get _dataKey () {
+      return PROdata.getSet(this._element, DATA_KEY)
+    }
+
+    set _dataKey (value) {
+      return PROdata.setSet(this._element, DATA_KEY, value)
     }
   }
 
