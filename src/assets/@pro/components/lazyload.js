@@ -33,6 +33,9 @@ const PROlazyLoad = (function () {
     // mask: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Crect fill='%23ccc' fill-opacity='.2' height='100%' width='100%'/%3E%3C/svg%3E"
   }
 
+  const $window = PRO(window)
+  const $document = PRO(document)
+
   class PROlazyLoad {
     constructor (selector, options) {
       if (PRO.isObject(selector)) {
@@ -46,12 +49,12 @@ const PROlazyLoad = (function () {
         if (this._scope) {
           this._scope.on(this._options.event, this._update.bind(this))
         }
-        window.addEventListener('scroll', this._update.bind(this))
-        window.addEventListener('resize', this._update.bind(this))
-        document.addEventListener(Events.UPDATE, this._update.bind(this))
-        document.addEventListener(Events.RESET, this._reset.bind(this))
+        $window.on('scroll', this._update.bind(this))
+        $window.on('resize', this._update.bind(this))
+        $document.on(Events.UPDATE, this._update.bind(this))
+        $document.on(Events.RESET, this._reset.bind(this))
         if (this._options.reset) {
-          document.addEventListener(this._options.reset, this._reset.bind(this))
+          $document.on(this._options.reset, this._reset.bind(this))
         }
         this._items = []
         this._select.each(el => this._load(el))
@@ -64,7 +67,6 @@ const PROlazyLoad = (function () {
         item._appear()
         this._items.push(item)
       }
-      return this
     }
 
     _update () {
@@ -74,9 +76,9 @@ const PROlazyLoad = (function () {
         if (this._scope) {
           this._scope.off(this._options.event, this._update)
         }
-        window.removeEventListener('scroll', this._update)
-        window.removeEventListener('resize', this._update)
-        document.removeEventListener(Events.UPDATE, this._update.bind(this))
+        $window.off('scroll', this._update)
+        $window.off('resize', this._update)
+        $document.off(Events.UPDATE, this._update.bind(this))
       }
       return this
     }
@@ -84,7 +86,6 @@ const PROlazyLoad = (function () {
     _reset () {
       this._items.forEach(item => item._reset())
       this._items = []
-      return this
     }
 
     static get name () {
