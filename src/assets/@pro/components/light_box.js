@@ -24,44 +24,53 @@ const PROlightBox = (function () {
   }
 
   class PROlightBox {
-    constructor (options) {
+    constructor (selector, options) {
+      if (PRO.isObject(selector)) {
+        options = selector
+        selector = null
+      }
       this._options = PRO.assign({}, Default, options)
-      this._stack = {}
-      // this._group = this._path = null
-      PROlightBox._init(this)
+      this._select = PRO.to(selector || `[data-${PROdata.toKey(this._options.attribute)}]`)
+      if (this._select.length) {
+        this._stack = {}
+        this._select.each(el => this._load(el))
+        PROlightBox._init(this)
+      }
     }
 
     get _index () {
       return this._group && this._stack[this._group].indexOf(this._path)
     }
 
-    load (element) {
-      const path = element.dataset[PROdata.toSet(this._options.attribute, 'href')] || element.dataset.href ||
-        element.getAttribute('href') || element.getAttribute('src')
-      if (path) {
-        const group = (path[0] === '#') ? 'html' : PROdata.getSet(element, this._options.attribute)
-        if (group && group !== 'html') {
-          if (!this._stack[group]) {
-            this._stack[group] = []
+    _load (element) {
+      if (!PROdata.getSet(element, DATA_KEY)) {
+        const path = element.dataset[PROdata.toSet(this._options.attribute, 'href')] || element.dataset.href ||
+          element.getAttribute('href') || element.getAttribute('src')
+        if (path) {
+          const group = (path[0] === '#') ? 'html' : PROdata.getSet(element, this._options.attribute)
+          if (group && group !== 'html') {
+            if (!this._stack[group]) {
+              this._stack[group] = []
+            }
+            if (this._stack[group].indexOf(path) === -1) {
+              this._stack[group].push(path)
+            }
           }
-          if (this._stack[group].indexOf(path) === -1) {
-            this._stack[group].push(path)
-          }
+          PRO(element).onclick(event => {
+            event.preventDefault()
+            event.stopPropagation()
+            this._path = path
+            this._group = group
+            if (this._group === 'html') {
+              this._html()
+            } else {
+              this._draw()
+            }
+          })
+          element.style.cursor = 'pointer'
         }
-        PRO(element).onclick(event => {
-          event.preventDefault()
-          event.stopPropagation()
-          this._path = path
-          this._group = group
-          if (this._group === 'html') {
-            this._html()
-          } else {
-            this._draw()
-          }
-        })
-        element.style.cursor = 'pointer'
+        PROdata.setSet(element, DATA_KEY, 'loaded')
       }
-      PROdata.setSet(element, DATA_KEY, 'loaded')
     }
 
     _html () {

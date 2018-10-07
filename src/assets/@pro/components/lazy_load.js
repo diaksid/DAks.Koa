@@ -21,6 +21,8 @@ const PROlazyLoad = (function () {
 
   const Default = {
     attribute: 'lazy',
+    scope: null,
+    event: 'scroll',
     duration: 1000,
     delay: 250,
     threshold: 0,
@@ -32,31 +34,31 @@ const PROlazyLoad = (function () {
   }
 
   class PROlazyLoad {
-    constructor (scope, event, options) {
-      if (PRO.isObject(scope)) {
-        options = scope
-        scope = null
-      } else if (PRO.isObject(event)) {
-        options = event
-        event = null
+    constructor (selector, options) {
+      if (PRO.isObject(selector)) {
+        options = selector
+        selector = null
       }
       this._options = PRO.assign({}, Default, options)
-      this._scope = scope && PRO(scope)
-      this._event = event || 'scroll'
-      if (this._scope) {
-        this._scope.on(this._event, this._update.bind(this))
+      this._select = PRO.to(selector || `[data-${PROdata.toKey(this._options.attribute)}]`)
+      if (this._select.length) {
+        this._scope = this._options.scope && PRO(this._options.scope)
+        if (this._scope) {
+          this._scope.on(this._options.event, this._update.bind(this))
+        }
+        window.addEventListener('scroll', this._update.bind(this))
+        window.addEventListener('resize', this._update.bind(this))
+        document.addEventListener(Events.UPDATE, this._update.bind(this))
+        document.addEventListener(Events.RESET, this._reset.bind(this))
+        if (this._options.reset) {
+          document.addEventListener(this._options.reset, this._reset.bind(this))
+        }
+        this._items = []
+        this._select.each(el => this._load(el))
       }
-      window.addEventListener('scroll', this._update.bind(this))
-      window.addEventListener('resize', this._update.bind(this))
-      document.addEventListener(Events.UPDATE, this._update.bind(this))
-      document.addEventListener(Events.RESET, this._reset.bind(this))
-      if (this._options.reset) {
-        // document.addEventListener(this._options.reset, this._reset.bind(this))
-      }
-      this._items = []
     }
 
-    load (element) {
+    _load (element) {
       if (!PROdata.getSet(element, DATA_KEY)) {
         const item = new Lazy(element, this._options)
         item._appear()
@@ -70,7 +72,7 @@ const PROlazyLoad = (function () {
       this._items.forEach(item => item._appear() || counter++)
       if (!counter) {
         if (this._scope) {
-          this._scope.off(this._event, this._update)
+          this._scope.off(this._options.event, this._update)
         }
         window.removeEventListener('scroll', this._update)
         window.removeEventListener('resize', this._update)
